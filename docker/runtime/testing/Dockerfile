@@ -10,4 +10,4 @@ COPY requirements-testing.txt .
 # Include the dependencies for testing.
 RUN pip install --requirement requirements-testing.txt
 
-ENTRYPOINT ["nosetests", "roomlistwatcher"]
+ENTRYPOINT ["nosetests", "downloadbot"]
