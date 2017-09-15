@@ -2,7 +2,7 @@
 
 set -eu
 
-TAG=$(grep -Po "version='\K\d\.\d\.\d" setup.py)
+TAG=$(./scripts/get-package-version.sh)
 
 docker build \
     --file docker/buildtime/base/Dockerfile \
