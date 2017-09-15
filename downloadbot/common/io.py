@@ -3,19 +3,17 @@
 import abc
 
 
-class JsonSerializable(object):
-
-    __metaclass__ = abc.ABCMeta
+class Disposable(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
-    def to_json(self):
+    def dispose(self):
 
         """
-        Convert the object to JSON.
+        Garbage collect the resource.
 
         Returns
         -------
-        str
+        None
         """
 
         raise NotImplementedError
