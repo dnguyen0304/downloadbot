@@ -33,5 +33,3 @@ RUN wget http://chromedriver.storage.googleapis.com/${CHROME_DRIVER_VERSION}/chr
 RUN chown --recursive ${NAMESPACE}:${NAMESPACE} ${CONFIGURATION_DIRECTORY} && \
 
 VOLUME ${CONFIGURATION_DIRECTORY}
-
-ENTRYPOINT ["python", "./main.py"]

@@ -16,3 +16,5 @@ RUN unzip -q ${PACKAGE} && \
     rm ${PACKAGE}
 
 RUN apt-get purge -y --auto-remove ${BUILDTIME_DEPENDENCIES}
+
+ENTRYPOINT ["python", "./main.py"]
