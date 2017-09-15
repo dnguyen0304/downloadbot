@@ -6,13 +6,7 @@ A Pokemon Showdown web scraper.
 1. Change the working directory to the package root directory.
 2. Build the image.
 ```
-# NOTE: Remember to replace the <tag> placeholder.
-
-sudo docker build \
-    --file docker/buildtime/base/Dockerfile \
-    --tag dnguyen0304/downloadbot-buildtime-base:<tag> \
-    --build-arg SHARED_VOLUME="/tmp/build" \
-    .
+sudo ./scripts/build-buildtime-base.sh
 ```
 3. Push the image.
 ```
