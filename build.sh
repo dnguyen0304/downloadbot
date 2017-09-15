@@ -4,7 +4,7 @@ set -eu
 
 DOMAIN="dnguyen0304"
 NAMESPACE="downloadbot"
-VERSION=$(grep -Po "version='\K\d\.\d\.\d" setup.py)
+VERSION=$(./scripts/get-package-version.sh)
 REMOTE_SHARED_VOLUME="/tmp/build"
 
 # Clean up existing packages created by previous builds.
