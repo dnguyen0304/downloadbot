@@ -2,6 +2,8 @@
 
 import abc
 
+from .common import io
+
 
 class Bot(metaclass=abc.ABCMeta):
 
@@ -21,3 +23,7 @@ class Bot(metaclass=abc.ABCMeta):
         """
 
         raise NotImplementedError
+
+
+class Disposable(Bot, io.Disposable, metaclass=abc.ABCMeta):
+    pass
