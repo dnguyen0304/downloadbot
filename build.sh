@@ -2,6 +2,12 @@
 
 set -eu
 
+if [ "${1:-}" = test ]; then
+    for_testing="true"
+else
+    for_testing="false"
+fi
+
 DOMAIN="dnguyen0304"
 NAMESPACE="downloadbot"
 VERSION=$(./scripts/get-package-version.sh)
@@ -47,3 +53,13 @@ docker build \
     --build-arg BASE_IMAGE_VERSION=${VERSION} \
     --build-arg NAMESPACE=${NAMESPACE} \
     .
+
+if [ "${for_testing}" = true ]; then
+    docker build \
+        --file docker/runtime/testing/Dockerfile \
+        --tag ${tag} \
+        --build-arg DOMAIN=${DOMAIN} \
+        --build-arg NAMESPACE=${NAMESPACE} \
+        --build-arg BASE_IMAGE_VERSION=${VERSION} \
+        .
+fi
