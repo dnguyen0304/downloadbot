@@ -21,3 +21,23 @@ class Page(metaclass=abc.ABCMeta):
         """
 
         raise NotImplementedError
+
+
+class Selenium(Page):
+
+    def __init__(self, url):
+
+        """
+        Parameters
+        ----------
+        url : str
+        """
+
+        self._url = url
+
+    def initialize(self, web_driver):
+        web_driver.get(url=self._url)
+
+    def __repr__(self):
+        repr_ = '{}(url="{}")'
+        return repr_.format(self.__class__.__name__, self._url)
