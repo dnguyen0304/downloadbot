@@ -21,8 +21,8 @@ class PokemonShowdown(object):
     def __init__(self, wait_context):
 
         """
-        This object assumes a request has already been issued to the
-        web driver to start rendering the page.
+        It is assumed a request has already been issued to the web
+        driver to start rendering the page.
 
         Parameters
         ----------
@@ -42,7 +42,7 @@ class PokemonShowdown(object):
 
         Raises
         ------
-        roomlistwatcher.common.automation.exceptions.ValidationFailed
+        downloadbot.common.automation.exceptions.ValidationFailed
             If the room was not entered successfully.
         """
 
@@ -64,7 +64,7 @@ class PokemonShowdown(object):
 
         Raises
         ------
-        roomlistwatcher.common.automation.exceptions.ConnectionLost
+        downloadbot.common.automation.exceptions.ConnectionLost
             If the connection was not established successfully or was lost.
         """
 
