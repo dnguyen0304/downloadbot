@@ -12,7 +12,7 @@ if _PYTHON_VERSION == _PYTHON_VERSION_27:
     import httplib as HttpStatus
 elif _PYTHON_VERSION == _PYTHON_VERSION_36:
     import http.server as http_serving
-    import http.HTTPStatus as HttpStatus
+    from http import HTTPStatus as HttpStatus
 else:
     message = 'This version of Python is not compatible.'
     raise ImportError(message)
