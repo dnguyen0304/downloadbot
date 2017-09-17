@@ -11,3 +11,7 @@ class ConnectionLost(AutomationFailed):
 
 class ValidationFailed(AutomationFailed):
     pass
+
+
+class NoResultFound(Exception):
+    pass
