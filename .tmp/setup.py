@@ -1,4 +1,3 @@
-    install_requires = [
         # This package is needed by the infrastructure layer to
         # implement producers that send their data to AWS Simple Queue
         # Service (SQS).
@@ -6,9 +5,5 @@
         # This package is needed by the application layer to use
         # enumerations.
         'enum34==1.1.6',
-        # This package is needed by the application layer to
-        # implement scrapers that extract data from web pages.
-        'selenium==3.3.3']
 
-                     install_requires=install_requires,
                      tests_require=['mock'],

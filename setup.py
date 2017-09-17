@@ -11,6 +11,11 @@ if __name__ == '__main__':
     with open('./README.md', 'r') as file:
         long_description = file.read()
 
+    install_requires = [
+        # This package is needed by the application layer to
+        # implement bots that interact with web pages.
+        'selenium==3.5.0']
+
     setuptools.setup(name=package_name,
                      version='0.1.0',
                      description=description,
@@ -21,6 +26,7 @@ if __name__ == '__main__':
                      license='MIT',
                      classifiers=['Programming Language :: Python :: 3.6'],
                      packages=setuptools.find_packages(exclude=['*.tests']),
+                     install_requires=install_requires,
                      test_suite='nose.collector',
                      tests_require=['nose'],
                      include_package_data=True)
