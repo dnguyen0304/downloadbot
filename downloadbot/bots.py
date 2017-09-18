@@ -82,7 +82,11 @@ class Download(Disposable):
         self._disposer.dispose(self._web_driver)
 
     def __repr__(self):
-        repr_ = '{}(web_driver={}, initializer={}, button_finder={}, disposer={})'
+        repr_ = ('{}('
+                 'web_driver={}, '
+                 'initializer={}, '
+                 'button_finder={}, '
+                 'disposer={})')
         return repr_.format(self.__class__.__name__,
                             self._web_driver,
                             self._initializer,
