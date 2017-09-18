@@ -25,7 +25,7 @@ class Page(metaclass=abc.ABCMeta):
         raise NotImplementedError
 
 
-class Selenium(Page):
+class SeleniumPage(Page):
 
     def initialize(self, web_driver, url):
         web_driver.get(url=url)
