@@ -24,7 +24,7 @@ class Find(object):
             If the target was found. Otherwise None.
         """
 
-        return self.data
+        return self.data or None
 
     def or_error(self):
 

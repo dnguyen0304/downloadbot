@@ -19,6 +19,10 @@ class TestFind(object):
     def test_or_none_returns_none_if_could_not_be_found(self):
         assert_is_none(self.result.or_none())
 
+    def test_or_none_returns_none_if_zero_value(self):
+        self.result.data = ''
+        assert_is_none(self.result.or_none())
+
     def test_or_error_returns_target_if_found(self):
         self.result.data = self.data
         assert_is(self.result.or_error(), self.data)
