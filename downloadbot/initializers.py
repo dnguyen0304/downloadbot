@@ -7,7 +7,7 @@ import abc
 class Page(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
-    def initialize(self, web_driver):
+    def initialize(self, web_driver, url):
 
         """
         Initialize the page.
@@ -15,6 +15,7 @@ class Page(metaclass=abc.ABCMeta):
         Parameters
         ----------
         web_driver : selenium.webdriver.remote.webdriver.WebDriver
+        url : str
 
         Returns
         -------
@@ -26,19 +27,9 @@ class Page(metaclass=abc.ABCMeta):
 
 class Selenium(Page):
 
-    def __init__(self, url):
-
-        """
-        Parameters
-        ----------
-        url : str
-        """
-
-        self._url = url
-
-    def initialize(self, web_driver):
-        web_driver.get(url=self._url)
+    def initialize(self, web_driver, url):
+        web_driver.get(url=url)
 
     def __repr__(self):
-        repr_ = '{}(url="{}")'
-        return repr_.format(self.__class__.__name__, self._url)
+        repr_ = '{}()'
+        return repr_.format(self.__class__.__name__)
