@@ -5,5 +5,3 @@
         # This package is needed by the application layer to use
         # enumerations.
         'enum34==1.1.6',
-
-                     tests_require=['mock'],

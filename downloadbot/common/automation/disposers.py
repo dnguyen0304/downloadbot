@@ -36,7 +36,7 @@ class SeleniumWebDriver(WebDriverDisposer):
 
         Parameters
         ----------
-        web_driver : selenium.webdriver.Chrome
+        web_driver : selenium.webdriver.remote.webdriver.WebDriver
 
         Returns
         -------
@@ -59,8 +59,8 @@ class CapturingWebDriver(WebDriverDisposer):
 
         Parameters
         ----------
-        disposer : roomlistwatcher.infrastructure.producing.disposers.WebDriverDisposer
-        generator : roomlistwatcher.infrastructure.producing.generators.FilePathGenerator
+        disposer : downloadbot.common.automation.disposers.WebDriverDisposer
+        generator : downloadbot.common.automation.generators.FilePathGenerator
             Generator for creating file paths.
         """
 

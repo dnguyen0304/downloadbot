@@ -28,5 +28,5 @@ if __name__ == '__main__':
                      packages=setuptools.find_packages(exclude=['*.tests']),
                      install_requires=install_requires,
                      test_suite='nose.collector',
-                     tests_require=['nose'],
+                     tests_require=['mock', 'nose'],
                      include_package_data=True)
