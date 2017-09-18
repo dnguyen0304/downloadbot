@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from downloadbot.common import automation
 
-class BattleNotCompleted(Exception):
+
+class BattleNotCompleted(automation.exceptions.AutomationFailed):
     pass
