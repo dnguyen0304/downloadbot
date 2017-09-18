@@ -3,7 +3,7 @@
 import selenium.common
 from selenium.webdriver.support import expected_conditions
 
-from . import results
+from downloadbot.common import lookup
 
 
 class Button(object):
@@ -31,10 +31,10 @@ class Button(object):
 
         Returns
         -------
-        downloadbot.common.automation.results.WebElement
+        downloadbot.common.lookup.results.Find
         """
 
-        result = results.WebElement()
+        result = lookup.results.Find()
 
         condition = expected_conditions.element_to_be_clickable(
             locator=locator)
@@ -43,5 +43,5 @@ class Button(object):
         except selenium.common.exceptions.TimeoutException:
             button = None
 
-        result.web_element = button
+        result.data = button
         return result
