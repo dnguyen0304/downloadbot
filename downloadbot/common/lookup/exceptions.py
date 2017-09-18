@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
 
 
-class NoResultFound(Exception):
+class NoResultFound(LookupError):
     pass
