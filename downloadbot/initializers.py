@@ -2,8 +2,6 @@
 
 import abc
 
-from .common import io
-
 
 class Page(metaclass=abc.ABCMeta):
 
@@ -23,10 +21,6 @@ class Page(metaclass=abc.ABCMeta):
         """
 
         raise NotImplementedError
-
-
-class Disposable(Page, io.Disposable, metaclass=abc.ABCMeta):
-    pass
 
 
 class Selenium(Page):
