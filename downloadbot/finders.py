@@ -22,7 +22,7 @@ class Finder(metaclass=abc.ABCMeta):
         raise NotImplementedError
 
 
-class NewestFilePath:
+class NewestFilePath(Finder):
 
     def __init__(self, directory_path):
 
