@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from . import exceptions
+from downloadbot.common import lookup
 
 
 class WebElement(object):
@@ -39,13 +39,13 @@ class WebElement(object):
 
         Raises
         ------
-        downloadbot.common.automation.exceptions.NoResultFound
+        downloadbot.common.lookup.exceptions.NoResultFound
             If the web element could not be found.
         """
 
         if self.web_element is None:
             message = 'The web element could not be found.'
-            raise exceptions.NoResultFound(message)
+            raise lookup.exceptions.NoResultFound(message)
         else:
             return self.web_element
 

@@ -7,6 +7,7 @@ from selenium.webdriver.common.by import By
 from . import exceptions
 from .common import automation
 from .common import io
+from .common import lookup
 
 
 class Bot(metaclass=abc.ABCMeta):
@@ -71,7 +72,7 @@ class Download(Disposable):
         result = self._finder.find(locator=self._LOCATOR)
         try:
             download_button = result.or_error()
-        except automation.exceptions.NoResultFound:
+        except lookup.exceptions.NoResultFound:
             message = 'The battle has not yet completed.'
             raise exceptions.BattleNotCompleted(message)
         else:
