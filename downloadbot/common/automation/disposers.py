@@ -5,7 +5,7 @@ import abc
 import selenium.common
 
 
-class WebDriverDisposer(object):
+class WebDriver(object):
 
     __metaclass__ = abc.ABCMeta
 
@@ -27,7 +27,7 @@ class WebDriverDisposer(object):
         raise NotImplementedError
 
 
-class SeleniumWebDriver(WebDriverDisposer):
+class SeleniumWebDriver(WebDriver):
 
     def dispose(self, web_driver):
 
@@ -50,7 +50,7 @@ class SeleniumWebDriver(WebDriverDisposer):
         return repr_.format(self.__class__.__name__)
 
 
-class CapturingWebDriver(WebDriverDisposer):
+class CapturingWebDriver(WebDriver):
 
     def __init__(self, disposer, generator):
 
@@ -59,7 +59,7 @@ class CapturingWebDriver(WebDriverDisposer):
 
         Parameters
         ----------
-        disposer : downloadbot.common.automation.disposers.WebDriverDisposer
+        disposer : downloadbot.common.automation.disposers.WebDriver
         generator : downloadbot.common.automation.generators.FilePath
             Generator for creating file paths.
         """

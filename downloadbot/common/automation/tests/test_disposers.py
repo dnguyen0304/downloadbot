@@ -8,7 +8,7 @@ from .. import disposers
 from .. import generators
 
 
-class NopWebDriverDisposer(disposers.WebDriverDisposer):
+class NopWebDriverDisposer(disposers.WebDriver):
 
     def dispose(self, web_driver):
         pass
