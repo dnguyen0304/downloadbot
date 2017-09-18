@@ -85,22 +85,3 @@ def get_configuration():
         parsed_configuration = json.loads(file.read())
 
     return parsed_configuration
-
-
-def format_exception(e):
-
-    """
-    Parameters
-    ----------
-    e : exceptions.Exception
-
-    Returns
-    -------
-    str
-    """
-
-    data = collections.OrderedDict()
-    data['exception_type'] = type(e).__module__ + '.' + e.__class__.__name__
-    data['exception_message'] = e.message
-
-    return json.dumps(data)

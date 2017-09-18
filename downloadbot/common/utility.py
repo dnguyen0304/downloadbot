@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
+import collections
 import datetime
+import json
 
 
 # This implementation closely mirrors the UTC class in pytz and
@@ -43,3 +45,25 @@ class TimeZone(object):
         """
 
         return UTC()
+
+
+def format_exception(e):
+
+    """
+    Parameters
+    ----------
+    e : exceptions.Exception
+
+    Returns
+    -------
+    str
+    """
+
+    data = collections.OrderedDict()
+    data['exception_type'] = type(e).__module__ + '.' + e.__class__.__name__
+    # In Python 2.7, exceptions have a message attribute. In Python 3.6,
+    # this attribute has been removed. In both versions, exceptions
+    # implements the str protocol.
+    data['exception_message'] = str(e)
+
+    return json.dumps(data)

@@ -1,14 +1,8 @@
 # -*- coding: utf-8 -*-
 
-import json
-
-from nose.tools import assert_false, assert_true, assert_equal
+from nose.tools import assert_false, assert_true
 
 from .. import utility
-
-
-class Mock(Exception):
-    pass
 
 
 class MockGetNowInSeconds(object):
@@ -114,25 +108,3 @@ class TestCountdownTimer(object):
         timer.start()
         has_time_remaining = timer.has_time_remaining
         assert_false(has_time_remaining)
-
-
-class TestFormatException(object):
-
-    def __init__(self):
-        self.message = None
-        self.data = None
-
-    def setup(self):
-        self.message = 'foo'
-        try:
-            raise Mock(self.message)
-        except Mock as e:
-            formatted = utility.format_exception(e=e)
-            self.data = json.loads(formatted)
-
-    def test_formatted_includes_exception_type(self):
-        assert_equal(self.data['exception_type'],
-                     __name__ + '.' + Mock.__name__)
-
-    def test_formatted_includes_exception_message(self):
-        assert_equal(self.data['exception_message'], self.message)
