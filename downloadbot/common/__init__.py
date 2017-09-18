@@ -2,6 +2,8 @@
 
 from . import automation
 from . import io
+from . import utility
 
 __all__ = ['automation',
-           'io']
+           'io',
+           'utility']
