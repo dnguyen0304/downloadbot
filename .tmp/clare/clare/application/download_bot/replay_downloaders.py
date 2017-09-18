@@ -2,60 +2,9 @@
 
 import functools
 
-from selenium.webdriver.common.by import By
-
 from . import exceptions
 from . import interfaces
 from clare import common
-
-
-class ReplayDownloader(interfaces.IReplayDownloader):
-
-    def __init__(self, web_driver, wait_context):
-
-        """
-        Parameters
-        ----------
-        web_driver : selenium.webdriver.Chrome
-        wait_context : selenium.webdriver.support.ui.WebDriverWait
-        """
-
-        self._web_driver = web_driver
-        self._wait_context = wait_context
-
-    def run(self, url):
-
-        """
-        Raises
-        ------
-        clare.application.download_bot.exceptions.BattleNotCompleted
-            If the battle has not yet completed.
-        """
-
-        self._initialize(url=url)
-        self._do_run()
-
-    def _initialize(self, url):
-        self._web_driver.get(url=url)
-
-    def _do_run(self):
-        download_button = common.automation.utilities.find_button(
-            locator=(By.CLASS_NAME, 'replayDownloadButton'),
-            wait_context=self._wait_context)
-        try:
-            download_button.click()
-        except AttributeError:
-            message = 'The battle has not yet completed.'
-            raise exceptions.BattleNotCompleted(message)
-
-    def dispose(self):
-        self._web_driver.quit()
-
-    def __repr__(self):
-        repr_ = '{}(web_driver={}, wait_context={})'
-        return repr_.format(self.__class__.__name__,
-                            self._web_driver,
-                            self._wait_context)
 
 
 class Retrying(interfaces.IReplayDownloader):
