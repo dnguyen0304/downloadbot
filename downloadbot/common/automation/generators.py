@@ -9,6 +9,7 @@ from downloadbot.common import utility
 _TIME_ZONE_NAME = 'UTC'
 
 
+# TODO (duy): This could be evaluated for being migrated to a separate library.
 class FilePath(object):
 
     __metaclass__ = abc.ABCMeta
