@@ -4,7 +4,7 @@ import abc
 import datetime
 import os
 
-from roomlistwatcher.common import utility
+from downloadbot.common import utility
 
 _TIME_ZONE_NAME = 'UTC'
 
@@ -72,7 +72,7 @@ class TimestampingFilePath(FilePathGenerator):
 
         Returns
         -------
-        roomlistwatcher.infrastructure.producing.generators.TimestampingFilePath
+        downloadbot.common.automation.generators.TimestampingFilePath
         """
 
         directory_path, file_name = os.path.split(file_path)
