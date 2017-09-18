@@ -33,7 +33,7 @@ class Observable(Notifyable):
         """
         Parameters
         ----------
-        observer : roomlistwatcher.common.event.notifiables.Notifyable
+        observer : downloadbot.common.event.notifiables.Notifyable
         """
 
         self._observers.add(observer)
