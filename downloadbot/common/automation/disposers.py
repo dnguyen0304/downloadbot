@@ -30,19 +30,6 @@ class WebDriver(object):
 class SeleniumWebDriver(WebDriver):
 
     def dispose(self, web_driver):
-
-        """
-        Garbage collect the resource.
-
-        Parameters
-        ----------
-        web_driver : selenium.webdriver.remote.webdriver.WebDriver
-
-        Returns
-        -------
-        None
-        """
-
         web_driver.quit()
 
     def __repr__(self):
