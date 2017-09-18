@@ -14,7 +14,7 @@ class NopWebDriverDisposer(disposers.WebDriverDisposer):
         pass
 
 
-class NopFilePathGenerator(generators.FilePathGenerator):
+class NopFilePathGenerator(generators.FilePath):
 
     def generate(self):
         pass

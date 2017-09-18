@@ -9,7 +9,7 @@ from downloadbot.common import utility
 _TIME_ZONE_NAME = 'UTC'
 
 
-class FilePathGenerator(object):
+class FilePath(object):
 
     __metaclass__ = abc.ABCMeta
 
@@ -27,7 +27,7 @@ class FilePathGenerator(object):
         raise NotImplementedError
 
 
-class TimestampingFilePath(FilePathGenerator):
+class TimestampingFilePath(FilePath):
 
     _QUALIFIER_SUBSTITUTION = '{qualifier}'
 
