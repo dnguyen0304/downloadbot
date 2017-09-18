@@ -3,6 +3,7 @@
 import abc
 
 
+# This could be evaluated for being migrated to common.
 class Page(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
