@@ -16,7 +16,7 @@ from .. import (PolicyBuilder,
                 stop_strategies,
                 wait_strategies)
 from .. import policy
-from roomlistwatcher import common
+from downloadbot import common
 
 
 def test_BaseAttemptEvent_do_to_json_default_serializer():

@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import six
+
 
 class Broker(object):
 
@@ -33,10 +35,10 @@ class Broker(object):
         """
         Returns
         -------
-        collections.Sequence
+        collections.KeysView
         """
 
-        return self._topics_index.keys()
+        return six.viewkeys(self._topics_index)
 
     def publish(self, event, topic_name):
 

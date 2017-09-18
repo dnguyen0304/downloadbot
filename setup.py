@@ -12,9 +12,15 @@ if __name__ == '__main__':
         long_description = file.read()
 
     install_requires = [
+        # This package is needed by the library layer to use
+        # enumerations in Python 2.
+        'enum34==1.1.6',
         # This package is needed by the application layer to
         # implement bots that interact with web pages.
-        'selenium==3.5.0']
+        'selenium==3.5.0',
+        # This package is needed by the library layer to provide Python
+        # 2 and 3 compatibility.
+        'six==1.11.0']
 
     setuptools.setup(name=package_name,
                      version='0.1.0',

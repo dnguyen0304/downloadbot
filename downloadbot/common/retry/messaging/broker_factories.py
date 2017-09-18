@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from roomlistwatcher.common import event
-
 from . import subscribers
 from .. import policy
+from downloadbot.common import event
 
 
 class Logging(object):

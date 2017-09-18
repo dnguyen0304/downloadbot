@@ -39,9 +39,9 @@ class TestBroker(object):
         topic_names = self.broker.list_topics()
         assert_equal(len(topic_names), 1)
 
-    def test_list_topics_returns_sequence(self):
+    def test_list_topics_returns_keys_view(self):
         topic_names = self.broker.list_topics()
-        assert_is_instance(topic_names, collections.Sequence)
+        assert_is_instance(topic_names, collections.KeysView)
 
     def test_publish_pushes_to_all_subscribers_by_topic_name(self):
         self.broker.create_topic(name=self.topic_name_1)

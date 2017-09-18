@@ -7,6 +7,7 @@ import sys
 import time
 
 import enum
+import six
 
 from . import exceptions
 from .attempt import Attempt
@@ -187,7 +188,7 @@ class Policy(object):
         attempt = Attempt.first()
 
         while True:
-            attempt = next(attempt)
+            attempt = six.next(attempt)
 
             self._publish_attempt_started(attempt_number=attempt.number)
 
@@ -229,7 +230,7 @@ class Policy(object):
             if attempt.was_successful and not should_continue:
                 break
             elif should_stop:
-                raise e
+                raise six.reraise(*e)
             else:
                 _sleep(wait_time)
 

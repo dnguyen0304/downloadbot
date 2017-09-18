@@ -35,7 +35,7 @@ class Attempt(object):
                       first_attempt_start_time=_get_now_in_seconds())
         return attempt
 
-    def next(self):
+    def __next__(self):
         attempt = self.__class__(
             number=self.number + 1,
             was_successful=None,
