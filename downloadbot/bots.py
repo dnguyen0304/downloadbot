@@ -20,6 +20,11 @@ class Bot(metaclass=abc.ABCMeta):
         Returns
         -------
         None
+
+        Raises
+        ------
+        downloadbot.common.automation.exceptions.AutomationFailed
+            If the automation failed.
         """
 
         raise NotImplementedError
