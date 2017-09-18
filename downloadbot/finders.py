@@ -1,8 +1,25 @@
 # -*- coding: utf-8 -*-
 
+import abc
 import os
 
 from downloadbot.common import lookup
+
+
+class Finder(metaclass=abc.ABCMeta):
+
+    @abc.abstractmethod
+    def find(self):
+
+        """
+        Look for the target.
+
+        Returns
+        -------
+        downloadbot.common.lookup.results.Find
+        """
+
+        raise NotImplementedError
 
 
 class NewestFilePath:
@@ -22,10 +39,6 @@ class NewestFilePath:
 
         """
         Look for the newest file path.
-
-        Returns
-        -------
-        downloadbot.common.lookup.results.Find
         """
 
         result = lookup.results.Find()
