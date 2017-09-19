@@ -8,6 +8,8 @@ from . import exceptions
 from .common import automation
 from .common import io
 from .common import lookup
+from downloadbot.common import retry
+from downloadbot.common import utility
 
 
 class Bot(metaclass=abc.ABCMeta):
@@ -92,6 +94,44 @@ class Download(Disposable):
                             self._initializer,
                             self._finder,
                             self._disposer)
+
+
+class Orchestrating(Disposable):
+
+    def __init__(self, bot, logger, policy):
+
+        """
+        Extend to include error handling and logging.
+
+        Parameters
+        ----------
+        bot : downloadbot.bots.Disposable
+        logger : logging.Logger
+        policy : downloadbot.common.retry.policy.Policy
+        """
+
+        self._bot = bot
+        self._logger = logger
+        self._policy = policy
+
+    def run(self, url):
+        try:
+            self._policy.execute(self._bot.run)
+        except retry.exceptions.MaximumRetry as e:
+            # The expected errors have persisted.
+            self._logger.error(msg=utility.format_exception(e=e))
+            message = 'The automation failed.'
+            raise automation.exceptions.AutomationFailed(message)
+
+    def dispose(self):
+        self._bot.dispose()
+
+    def __repr__(self):
+        repr_ = '{}(bot={}, logger={}, policy={})'
+        return repr_.format(self.__class__.__name__,
+                            self._bot,
+                            self._logger,
+                            self._policy)
 
 
 class PreValidating(Disposable):
