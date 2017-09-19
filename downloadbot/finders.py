@@ -84,7 +84,7 @@ class Orchestrating(Finder):
         except retry.exceptions.MaximumRetry as e:
             # The expected errors have persisted. Defer to the
             # fallback.
-            self._logger.debug(msg=utility.format_exception(e=e))
+            self._logger.error(msg=utility.format_exception(e=e))
             result = lookup.results.Find(value='', zero_value='')
         return result
 
