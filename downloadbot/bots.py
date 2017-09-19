@@ -143,3 +143,39 @@ class PreValidating(Disposable):
         return repr_.format(self.__class__.__name__,
                             self._bot,
                             self._validator)
+
+
+class PostValidating(Disposable):
+
+    def __init__(self, bot, file_path_finder):
+
+        """
+        Extend to include validation.
+
+        Validation occurs after the bot runs.
+
+        Parameters
+        ----------
+        bot : downloadbot.bots.Disposable
+        file_path_finder : downloadbot.finders.Finder
+        """
+
+        self._bot = bot
+        self._file_path_finder = file_path_finder
+
+    def run(self, url):
+        # The bot running a download and the finder finding the newest
+        # file path are independent operations but should be executed
+        # as a pseudo-atomic one. There might be a way to get the file
+        # path from the web driver, but the solution is non-trivial.
+        self._bot.run(url=url)
+        self._file_path_finder.find()
+
+    def dispose(self):
+        self._bot.dispose()
+
+    def __repr__(self):
+        repr_ = '{}(bot={}, file_path_finder={})'
+        return repr_.format(self.__class__.__name__,
+                            self._bot,
+                            self._file_path_finder)
