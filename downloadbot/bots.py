@@ -94,7 +94,7 @@ class Download(Disposable):
                             self._disposer)
 
 
-class Validating(Disposable):
+class PreValidating(Disposable):
 
     def __init__(self, bot, validator):
 
