@@ -8,8 +8,8 @@ from . import exceptions
 from .common import automation
 from .common import io
 from .common import lookup
-from downloadbot.common import retry
-from downloadbot.common import utility
+from .common import retry
+from .common import utility
 
 
 class Bot(metaclass=abc.ABCMeta):
