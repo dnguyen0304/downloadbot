@@ -62,7 +62,7 @@ class Find(object):
             If the target could not be found.
         """
 
-        if self._value is None:
+        if not self._value:
             message = 'The target could not be found.'
             raise lookup.exceptions.NoResultFound(message)
         else:
