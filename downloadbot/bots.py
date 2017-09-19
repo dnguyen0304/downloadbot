@@ -101,6 +101,8 @@ class PreValidating(Disposable):
         """
         Extend to include validation.
 
+        Validation occurs before the bot runs.
+
         Parameters
         ----------
         bot : downloadbot.bots.Disposable
