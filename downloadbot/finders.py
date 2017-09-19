@@ -4,6 +4,8 @@ import abc
 import os
 
 from downloadbot.common import lookup
+from downloadbot.common import retry
+from downloadbot.common import utility
 
 
 class Finder(metaclass=abc.ABCMeta):
@@ -58,3 +60,41 @@ class NewestFilePath(Finder):
     def __repr__(self):
         repr_ = '{}(directory_path="{}")'
         return repr_.format(self.__class__.__name__, self._directory_path)
+
+
+class Orchestrating(Finder):
+
+    def __init__(self, finder, logger, policy):
+
+        """
+        Extend to include error handling and logging.
+
+        Parameters
+        ----------
+        finder : downloadbot.finders.Finder
+        logger : logging.Logger
+        policy : downloadbot.common.retry.policy.Policy
+        """
+
+        self._finder = finder
+        self._logger = logger
+        self._policy = policy
+
+    def find(self):
+        try:
+            result = self._policy.execute(self._finder.find)
+        except retry.exceptions.MaximumRetry as e:
+            # The expected errors have persisted. Defer to the
+            # fallback.
+            self._logger.debug(msg=utility.format_exception(e=e))
+            fallback = lookup.results.Find()
+            fallback.data = ''
+            result = fallback
+        return result
+
+    def __repr__(self):
+        repr_ = '{}(finder={}, logger={}, policy={})'
+        return repr_.format(self.__class__.__name__,
+                            self._finder,
+                            self._logger,
+                            self._policy)
