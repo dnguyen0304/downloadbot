@@ -23,7 +23,7 @@ class Finder(metaclass=abc.ABCMeta):
 
 
 # This could be refactored to use pathlib.
-class NewestPath(Finder):
+class NewestFilePath(Finder):
 
     def __init__(self, directory_path):
 
