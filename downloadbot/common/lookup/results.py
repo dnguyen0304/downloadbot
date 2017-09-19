@@ -5,13 +5,19 @@ from downloadbot.common import lookup
 
 class Find(object):
 
-    def __init__(self):
+    def __init__(self, value, zero_value):
 
         """
         A generic proxy for the result of a find operation.
+
+        Parameters
+        ----------
+        value : object
+        zero_value : object
         """
 
-        self.data = None
+        self._value = value
+        self._zero_value = zero_value
 
     def or_none(self):
 
@@ -24,7 +30,21 @@ class Find(object):
             If the target was found. Otherwise None.
         """
 
-        return self.data or None
+        return self._value or None
+
+    def or_zero_value(self):
+
+        """
+        Return the target if it was found or return its zero value
+        otherwise.
+
+        Returns
+        -------
+        object
+            If the target was found. Otherwise its zero value.
+        """
+
+        return self._value or self._zero_value
 
     def or_error(self):
 
@@ -42,12 +62,14 @@ class Find(object):
             If the target could not be found.
         """
 
-        if self.data is None:
+        if self._value is None:
             message = 'The target could not be found.'
             raise lookup.exceptions.NoResultFound(message)
         else:
-            return self.data
+            return self._value
 
     def __repr__(self):
-        repr_ = '{}()'
-        return repr_.format(self.__class__.__name__)
+        repr_ = '{}(value={}, zero_value={})'
+        return repr_.format(self.__class__.__name__,
+                            self._value,
+                            self._zero_value)

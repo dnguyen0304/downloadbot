@@ -44,8 +44,6 @@ class NewestFilePath(Finder):
         Look for the newest file path.
         """
 
-        result = lookup.results.Find()
-
         file_paths = (os.path.join(self._directory_path, file_name)
                       for file_name
                       in os.listdir(self._directory_path))
@@ -54,7 +52,7 @@ class NewestFilePath(Finder):
         except ValueError:
             file_path = ''
 
-        result.data = file_path
+        result = lookup.results.Find(value=file_path, zero_value='')
         return result
 
     def __repr__(self):
@@ -87,9 +85,7 @@ class Orchestrating(Finder):
             # The expected errors have persisted. Defer to the
             # fallback.
             self._logger.debug(msg=utility.format_exception(e=e))
-            fallback = lookup.results.Find()
-            fallback.data = ''
-            result = fallback
+            result = lookup.results.Find(value='', zero_value='')
         return result
 
     def __repr__(self):

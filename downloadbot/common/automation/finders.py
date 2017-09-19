@@ -34,8 +34,6 @@ class Button(object):
         downloadbot.common.lookup.results.Find
         """
 
-        result = lookup.results.Find()
-
         condition = expected_conditions.element_to_be_clickable(
             locator=locator)
         try:
@@ -43,5 +41,5 @@ class Button(object):
         except selenium.common.exceptions.TimeoutException:
             button = None
 
-        result.data = button
+        result = lookup.results.Find(value=button, zero_value=None)
         return result
