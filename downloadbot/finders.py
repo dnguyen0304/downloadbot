@@ -22,6 +22,7 @@ class Finder(metaclass=abc.ABCMeta):
         raise NotImplementedError
 
 
+# This could be refactored to use pathlib.
 class NewestFilePath(Finder):
 
     def __init__(self, directory_path):
