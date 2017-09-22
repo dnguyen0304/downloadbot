@@ -3,9 +3,9 @@
 import abc
 import os
 
-from downloadbot.common import lookup
-from downloadbot.common import retry
-from downloadbot.common import utility
+from .common import lookup
+from .common import retry
+from .common import utility
 
 
 class Finder(metaclass=abc.ABCMeta):
