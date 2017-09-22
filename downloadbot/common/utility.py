@@ -2,10 +2,20 @@
 
 import collections
 import datetime
+import enum
 import json
 import os
 
 _ENVIRONMENT_VARIABLE_NAME = 'CONFIGURATION_FILE_PATH'
+
+
+class AutomatedEnum(enum.Enum):
+
+    def __new__(cls):
+        value = len(cls.__members__) + 1
+        object_ = object.__new__(cls)
+        object_._value_ = value
+        return object_
 
 
 # This implementation closely mirrors the UTC class in pytz and
