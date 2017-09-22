@@ -6,23 +6,14 @@ import json
 import sys
 import time
 
-import enum
 import six
 
 from . import exceptions
 from .attempt import Attempt
+from downloadbot.common import utility
 
 
-class AutomatedEnum(enum.Enum):
-
-    def __new__(cls):
-        value = len(cls.__members__) + 1
-        object_ = object.__new__(cls)
-        object_._value_ = value
-        return object_
-
-
-class Topic(AutomatedEnum):
+class Topic(utility.AutomatedEnum):
     ATTEMPT_STARTED = ()
     ATTEMPT_COMPLETED = ()
 
