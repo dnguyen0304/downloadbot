@@ -17,18 +17,32 @@ PORT_NUMBER = 9090
 
 class MockServer(http_serving.BaseHTTPRequestHandler):
 
-    _PAGES_INDEX = {'connection_lost':
-b"""
-<body>
-  <div class="ps-overlay">
-    <div>
-      <form>
-        <p>disconnected</p>
-      </form>
-    </div>
-  </div>
-</body>
-"""}
+    _PAGES_INDEX = {
+        'connection_lost':
+            b"""
+            <body>
+              <div class="ps-overlay">
+                <div>
+                  <form>
+                    <p>disconnected</p>
+                  </form>
+                </div>
+              </div>
+            </body>
+            """,
+        'title_has_correct_content':
+            b"""
+            <head>
+                <title>foo</title>
+            </head>
+            """,
+        'title_has_incorrect_content':
+            b"""
+            <head>
+                <title>Showdown!</title>
+            </head>
+            """
+    }
 
     def do_GET(self):
         try:
@@ -70,6 +84,15 @@ class TestPokemonShowdown(object):
     def test_connection_lost_raises_exception(self):
         self.initialize_web_driver(path='connection_lost')
         self.validator.check_connection_exists()
+
+    def test_room_was_entered_title_has_correct_content(self):
+        self.initialize_web_driver(path='title_has_correct_content')
+        self.validator.check_room_was_entered()
+
+    @raises(exceptions.ValidationFailed)
+    def test_room_was_entered_title_has_incorrect_content(self):
+        self.initialize_web_driver(path='title_has_incorrect_content')
+        self.validator.check_room_was_entered()
 
     def initialize_web_driver(self, path):
         url = self.build_url(path=path)
