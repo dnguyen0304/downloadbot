@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import abc
+import functools
 
 from selenium.webdriver.common.by import By
 
@@ -115,8 +116,9 @@ class Orchestrating(Disposable):
         self._policy = policy
 
     def run(self, url):
+        run = functools.partial(self._bot.run, url=url)
         try:
-            self._policy.execute(self._bot.run)
+            self._policy.execute(run)
         except retry.exceptions.MaximumRetry as e:
             # The expected errors have persisted.
             self._logger.error(msg=utility.format_exception(e=e))
