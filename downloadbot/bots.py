@@ -45,20 +45,20 @@ class Download(Disposable):
 
     _LOCATOR = (By.CLASS_NAME, 'replayDownloadButton')
 
-    def __init__(self, web_driver, initializer, button_finder, disposer):
+    def __init__(self, web_driver, initializer, finder, disposer):
 
         """
         Parameters
         ----------
         web_driver : selenium.webdriver.remote.webdriver.WebDriver
         initializer : downloadbot.initializers.Page
-        button_finder : downloadbot.common.automation.finders.Button
+        finder : downloadbot.common.automation.finders.Button
         disposer : downloadbot.common.automation.disposers.WebDriver
         """
 
         self._web_driver = web_driver
         self._initializer = initializer
-        self._finder = button_finder
+        self._finder = finder
         self._disposer = disposer
 
     def run(self, url):
@@ -87,7 +87,7 @@ class Download(Disposable):
         repr_ = ('{}('
                  'web_driver={}, '
                  'initializer={}, '
-                 'button_finder={}, '
+                 'finder={}, '
                  'disposer={})')
         return repr_.format(self.__class__.__name__,
                             self._web_driver,
