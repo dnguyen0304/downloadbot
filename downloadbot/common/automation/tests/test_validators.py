@@ -36,6 +36,12 @@ class MockServer(http_serving.BaseHTTPRequestHandler):
                 <title>foo</title>
             </head>
             """,
+        'title_has_no_content':
+            b"""
+            <head>
+                <title></title>
+            </head>
+            """,
         'title_has_incorrect_content':
             b"""
             <head>
@@ -87,6 +93,11 @@ class TestPokemonShowdown(object):
 
     def test_room_was_entered_title_has_correct_content(self):
         self.initialize_web_driver(path='title_has_correct_content')
+        self.validator.check_room_was_entered()
+
+    @raises(exceptions.ValidationFailed)
+    def test_room_was_entered_title_has_no_content(self):
+        self.initialize_web_driver(path='title_has_no_content')
         self.validator.check_room_was_entered()
 
     @raises(exceptions.ValidationFailed)

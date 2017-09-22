@@ -13,7 +13,7 @@ class title_not_equal(object):
         self._title = title
 
     def __call__(self, web_driver):
-        return self._title != web_driver.title
+        return web_driver.title and web_driver.title != self._title
 
 
 class PokemonShowdown(object):
