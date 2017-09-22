@@ -18,7 +18,7 @@ PORT_NUMBER = 9090
 class MockServer(http_serving.BaseHTTPRequestHandler):
 
     _PAGES_INDEX = {'connection_lost':
-"""
+b"""
 <body>
   <div class="ps-overlay">
     <div>
