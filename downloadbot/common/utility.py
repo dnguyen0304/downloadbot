@@ -3,6 +3,9 @@
 import collections
 import datetime
 import json
+import os
+
+_ENVIRONMENT_VARIABLE_NAME = 'CONFIGURATION_FILE_PATH'
 
 
 # This implementation closely mirrors the UTC class in pytz and
@@ -67,3 +70,21 @@ def format_exception(e):
     data['exception_message'] = str(e)
 
     return json.dumps(data)
+
+
+def get_configuration():
+
+    """
+    Read the application configuration.
+
+    Returns
+    -------
+    collections.Mapping
+    """
+
+    configuration_file_path = os.environ[_ENVIRONMENT_VARIABLE_NAME]
+
+    with open(configuration_file_path, 'rb') as file:
+        parsed_configuration = json.loads(file.read())
+
+    return parsed_configuration

@@ -1,13 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import collections
-import json
-import os
 import time
 
 import enum
-
-_ENVIRONMENT_VARIABLE_NAME = 'CONFIGURATION_FILE_PATH'
 
 
 class AutomatedEnum(enum.Enum):
@@ -67,21 +63,3 @@ class CountdownTimer(object):
         return repr_.format(self.__class__.__name__,
                             self._duration,
                             self._get_now_in_seconds)
-
-
-def get_configuration():
-
-    """
-    Read the application configuration.
-
-    Returns
-    -------
-    dict
-    """
-
-    configuration_file_path = os.environ[_ENVIRONMENT_VARIABLE_NAME]
-
-    with open(configuration_file_path, 'rb') as file:
-        parsed_configuration = json.loads(file.read())
-
-    return parsed_configuration
