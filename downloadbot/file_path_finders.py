@@ -8,7 +8,7 @@ from .common import retry
 from .common import utility
 
 
-class Finder(metaclass=abc.ABCMeta):
+class FilePathFinder(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     def find(self):
@@ -25,7 +25,7 @@ class Finder(metaclass=abc.ABCMeta):
 
 
 # This could be refactored to use pathlib.
-class NewestFilePath(Finder):
+class NewestFilePath(FilePathFinder):
 
     def __init__(self, directory_path):
 
@@ -60,7 +60,7 @@ class NewestFilePath(Finder):
         return repr_.format(self.__class__.__name__, self._directory_path)
 
 
-class Orchestrating(Finder):
+class Orchestrating(FilePathFinder):
 
     def __init__(self, finder, logger, policy):
 
@@ -69,7 +69,7 @@ class Orchestrating(Finder):
 
         Parameters
         ----------
-        finder : downloadbot.file_path_finders.Finder
+        finder : downloadbot.file_path_finders.FilePathFinder
         logger : logging.Logger
         policy : downloadbot.common.retry.policy.Policy
         """
