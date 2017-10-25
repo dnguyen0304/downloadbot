@@ -33,7 +33,7 @@ class PageInitializer(metaclass=abc.ABCMeta):
         raise NotImplementedError
 
 
-class SeleniumPage(PageInitializer):
+class Selenium(PageInitializer):
 
     def initialize(self, web_driver, url):
         web_driver.get(url=url)
