@@ -46,19 +46,19 @@ class Download(Disposable):
 
     _LOCATOR = (By.CLASS_NAME, 'replayDownloadButton')
 
-    def __init__(self, web_driver, initializer, finder, disposer):
+    def __init__(self, web_driver, page_initializer, finder, disposer):
 
         """
         Parameters
         ----------
         web_driver : selenium.webdriver.remote.webdriver.WebDriver
-        initializer : downloadbot.page_initializers.PageInitializer
+        page_initializer : downloadbot.page_initializers.PageInitializer
         finder : downloadbot.common.automation.button_finders.Button
         disposer : downloadbot.common.automation.disposers.WebDriver
         """
 
         self._web_driver = web_driver
-        self._initializer = initializer
+        self._page_initializer = page_initializer
         self._finder = finder
         self._disposer = disposer
 
@@ -72,7 +72,7 @@ class Download(Disposable):
         """
 
         # TODO(duy): This raises an unhandled AutomationFailed exception.
-        self._initializer.initialize(web_driver=self._web_driver, url=url)
+        self._page_initializer.initialize(web_driver=self._web_driver, url=url)
         result = self._finder.find(locator=self._LOCATOR)
         try:
             download_button = result.or_error()
@@ -88,12 +88,12 @@ class Download(Disposable):
     def __repr__(self):
         repr_ = ('{}('
                  'web_driver={}, '
-                 'initializer={}, '
+                 'page_initializer={}, '
                  'finder={}, '
                  'disposer={})')
         return repr_.format(self.__class__.__name__,
                             self._web_driver,
-                            self._initializer,
+                            self._page_initializer,
                             self._finder,
                             self._disposer)
 
