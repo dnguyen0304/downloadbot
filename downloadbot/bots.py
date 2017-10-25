@@ -120,8 +120,13 @@ class Orchestrating(Disposable):
         run = functools.partial(self._bot.run, url=url)
         try:
             self._policy.execute(run)
+        except exceptions.RoomExpired as e:
+            # An expected case has occurred. This should be handled
+            # higher up in the stack.
+            self._logger.debug(msg=utility.format_exception(e=e))
+            raise
         except retry.exceptions.MaximumRetry as e:
-            # The expected errors have persisted.
+            # An expected case has persisted.
             self._logger.error(msg=utility.format_exception(e=e))
             message = 'The automation failed.'
             raise automation.exceptions.AutomationFailed(message)
@@ -160,7 +165,10 @@ class PostValidating(Disposable):
         # file path are independent operations but should be executed
         # as a pseudo-atomic one. There might be a way to get the file
         # path from the web driver, but the solution is non-trivial.
-        self._bot.run(url=url)
+        try:
+            self._bot.run(url=url)
+        except exceptions.RoomExpired:
+            return
         self._file_path_finder.find()
 
     def dispose(self):

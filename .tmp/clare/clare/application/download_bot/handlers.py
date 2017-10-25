@@ -59,7 +59,7 @@ class OrchestratingHandler(messaging.consumer.interfaces.IHandler):
     def handle(self, record):
         try:
             self._handler.handle(record=record)
-        except (exceptions.RoomExpired, retry.exceptions.MaximumRetry) as e:
+        except retry.exceptions.MaximumRetry as e:
             message = common.logging.utilities.format_exception(e=e)
             self._logger.debug(msg=message)
 
