@@ -154,7 +154,7 @@ class PostValidating(Disposable):
         Parameters
         ----------
         bot : downloadbot.bots.Disposable
-        file_path_finder : downloadbot.finders.FilePathFinder
+        file_path_finder : downloadbot.finders.FilePath
         """
 
         self._bot = bot

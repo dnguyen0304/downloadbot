@@ -8,7 +8,7 @@ from .common import retry
 from .common import utility
 
 
-class FilePathFinder(metaclass=abc.ABCMeta):
+class FilePath(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     def find(self):
@@ -25,7 +25,7 @@ class FilePathFinder(metaclass=abc.ABCMeta):
 
 
 # This could be refactored to use pathlib.
-class Newest(FilePathFinder):
+class Newest(FilePath):
 
     def __init__(self, directory_path):
 
@@ -60,27 +60,27 @@ class Newest(FilePathFinder):
         return repr_.format(self.__class__.__name__, self._directory_path)
 
 
-class Orchestrating(FilePathFinder):
+class Orchestrating(FilePath):
 
-    def __init__(self, finder, logger, policy):
+    def __init__(self, file_path_finder, logger, policy):
 
         """
         Extend to include error handling and logging.
 
         Parameters
         ----------
-        finder : downloadbot.finders.FilePathFinder
+        file_path_finder : downloadbot.finders.FilePath
         logger : logging.Logger
         policy : downloadbot.common.retry.policy.Policy
         """
 
-        self._finder = finder
+        self._file_path_finder = file_path_finder
         self._logger = logger
         self._policy = policy
 
     def find(self):
         try:
-            result = self._policy.execute(self._finder.find)
+            result = self._policy.execute(self._file_path_finder.find)
         except retry.exceptions.MaximumRetry as e:
             # The expected errors have persisted. Defer to the
             # fallback.
@@ -89,8 +89,8 @@ class Orchestrating(FilePathFinder):
         return result
 
     def __repr__(self):
-        repr_ = '{}(finder={}, logger={}, policy={})'
+        repr_ = '{}(file_path_finder={}, logger={}, policy={})'
         return repr_.format(self.__class__.__name__,
-                            self._finder,
+                            self._file_path_finder,
                             self._logger,
                             self._policy)
