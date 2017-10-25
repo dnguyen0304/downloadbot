@@ -2,13 +2,12 @@
 
 import abc
 
-from downloadbot.common import automation
-
 from . import exceptions
+from .common import automation
 
 
 # This could be evaluated for being migrated to common.
-class Page(metaclass=abc.ABCMeta):
+class PageInitializer(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     def initialize(self, web_driver, url):
@@ -34,7 +33,7 @@ class Page(metaclass=abc.ABCMeta):
         raise NotImplementedError
 
 
-class SeleniumPage(Page):
+class SeleniumPage(PageInitializer):
 
     def initialize(self, web_driver, url):
         web_driver.get(url=url)
@@ -44,7 +43,7 @@ class SeleniumPage(Page):
         return repr_.format(self.__class__.__name__)
 
 
-class PostValidating(Page):
+class PostValidating(PageInitializer):
 
     def __init__(self, initializer, validator):
 
@@ -55,7 +54,7 @@ class PostValidating(Page):
 
         Parameters
         ----------
-        initializer : downloadbot.page_initializers.Page
+        initializer : downloadbot.page_initializers.PageInitializer
         validator : downloadbot.common.automation.validators.PokemonShowdown
         """
 
