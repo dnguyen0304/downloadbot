@@ -55,7 +55,7 @@ class PostValidating(Page):
 
         Parameters
         ----------
-        initializer : downloadbot.initializers.Page
+        initializer : downloadbot.page_initializers.Page
         validator : downloadbot.common.automation.validators.PokemonShowdown
         """
 
