@@ -69,7 +69,7 @@ class Orchestrating(Finder):
 
         Parameters
         ----------
-        finder : downloadbot.finders.Finder
+        finder : downloadbot.file_path_finders.Finder
         logger : logging.Logger
         policy : downloadbot.common.retry.policy.Policy
         """
