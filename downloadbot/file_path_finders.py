@@ -25,7 +25,7 @@ class FilePathFinder(metaclass=abc.ABCMeta):
 
 
 # This could be refactored to use pathlib.
-class NewestFilePath(FilePathFinder):
+class Newest(FilePathFinder):
 
     def __init__(self, directory_path):
 
