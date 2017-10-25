@@ -27,7 +27,7 @@ class WebDriver(object):
         raise NotImplementedError
 
 
-class SeleniumWebDriver(WebDriver):
+class Selenium(WebDriver):
 
     def dispose(self, web_driver):
         web_driver.quit()
@@ -37,7 +37,7 @@ class SeleniumWebDriver(WebDriver):
         return repr_.format(self.__class__.__name__)
 
 
-class CapturingWebDriver(WebDriver):
+class Capturing(WebDriver):
 
     def __init__(self, disposer, generator):
 

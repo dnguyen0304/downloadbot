@@ -8,7 +8,7 @@ from .. import disposers
 from .. import generators
 
 
-class NopWebDriverDisposer(disposers.WebDriver):
+class NopDisposer(disposers.WebDriver):
 
     def dispose(self, web_driver):
         pass
@@ -20,14 +20,14 @@ class NopFilePathGenerator(generators.FilePath):
         pass
 
 
-class TestCapturingWebDriver(object):
+class TestCapturing(object):
 
     def __init__(self):
         self.disposer = None
 
     def setup(self):
-        self.disposer = disposers.CapturingWebDriver(
-            disposer=NopWebDriverDisposer(),
+        self.disposer = disposers.Capturing(
+            disposer=NopDisposer(),
             generator=NopFilePathGenerator())
 
     def test_dispose_does_not_raise_web_driver_exception(self):
