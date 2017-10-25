@@ -53,7 +53,7 @@ class Download(Disposable):
         ----------
         web_driver : selenium.webdriver.remote.webdriver.WebDriver
         page_initializer : downloadbot.initializers.PageInitializer
-        button_finder : downloadbot.common.automation.button_finders.ButtonFinder
+        button_finder : downloadbot.common.automation.finders.ButtonFinder
         disposer : downloadbot.common.automation.disposers.WebDriver
         """
 
