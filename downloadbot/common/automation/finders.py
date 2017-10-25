@@ -8,7 +8,7 @@ from selenium.webdriver.support import expected_conditions
 from downloadbot.common import lookup
 
 
-class ButtonFinder(metaclass=abc.ABCMeta):
+class Button(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     def find(self, locator):
@@ -30,7 +30,7 @@ class ButtonFinder(metaclass=abc.ABCMeta):
         raise NotImplementedError
 
 
-class Selenium(ButtonFinder):
+class Selenium(Button):
 
     def __init__(self, wait_context):
 
