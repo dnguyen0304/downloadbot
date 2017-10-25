@@ -1,9 +1,33 @@
 # -*- coding: utf-8 -*-
 
+import abc
+
 import selenium.common
 from selenium.webdriver.support import expected_conditions
 
 from downloadbot.common import lookup
+
+
+class ButtonFinder(metaclass=abc.ABCMeta):
+
+    @abc.abstractmethod
+    def find(self, locator):
+
+        """
+        Look for the button specified by the predicate.
+
+        Parameters
+        ----------
+        locator : tuple
+            Two-element tuple. The first element is the select strategy.
+            The second element is the value.
+
+        Returns
+        -------
+        downloadbot.common.lookup.results.Find
+        """
+
+        raise NotImplementedError
 
 
 class Button(object):
