@@ -28,7 +28,7 @@ class FilePath(object):
         raise NotImplementedError
 
 
-class TimestampingFilePath(FilePath):
+class Timestamping(FilePath):
 
     _QUALIFIER_SUBSTITUTION = '{qualifier}'
 
@@ -59,8 +59,8 @@ class TimestampingFilePath(FilePath):
     def from_file_path(cls, file_path, qualifier_delimiter=None):
 
         """
-        Alternate constructor for creating an TimestampingFilePath from
-        a file path.
+        Alternate constructor for creating a Timestamping from a file
+        path.
 
         The time complexity is O(n), where n is the length of the file
         path.
@@ -73,7 +73,7 @@ class TimestampingFilePath(FilePath):
 
         Returns
         -------
-        downloadbot.common.automation.generators.TimestampingFilePath
+        downloadbot.common.automation.generators.Timestamping
         """
 
         directory_path, file_name = os.path.split(file_path)

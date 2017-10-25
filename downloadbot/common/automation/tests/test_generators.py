@@ -7,7 +7,7 @@ from nose.tools import assert_is_not_none
 from .. import generators
 
 
-class TestTimestampingFilePath(object):
+class TestTimestamping(object):
 
     def setup(self):
         self.template = '[\w/]+{qualifier_delimiter}[^\.]+\.\w+'
@@ -17,7 +17,7 @@ class TestTimestampingFilePath(object):
         self.file_extension = '.foobar'
         self.qualifier_delimiter = '-'
 
-        self.generator = generators.TimestampingFilePath(
+        self.generator = generators.Timestamping(
             directory_path=self.directory_path,
             file_name=self.file_name,
             file_extension=self.file_extension)
@@ -25,7 +25,7 @@ class TestTimestampingFilePath(object):
     def test_qualifier_delimiter(self):
         qualifier_delimiter = '_'
         pattern = self.template.format(qualifier_delimiter=qualifier_delimiter)
-        generator = generators.TimestampingFilePath(
+        generator = generators.Timestamping(
             directory_path=self.directory_path,
             file_name=self.file_name,
             file_extension=self.file_extension,
@@ -45,6 +45,6 @@ class TestTimestampingFilePath(object):
         input = ''.join((self.directory_path,
                          self.file_name,
                          self.file_extension))
-        generator = generators.TimestampingFilePath.from_file_path(input)
+        generator = generators.Timestamping.from_file_path(input)
         output = generator.generate()
         assert_is_not_none(re.match(pattern, output))
