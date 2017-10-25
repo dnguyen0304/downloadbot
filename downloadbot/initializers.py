@@ -7,7 +7,7 @@ from .common import automation
 
 
 # This could be evaluated for being migrated to common.
-class PageInitializer(metaclass=abc.ABCMeta):
+class Page(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     def initialize(self, web_driver, url):
@@ -33,7 +33,7 @@ class PageInitializer(metaclass=abc.ABCMeta):
         raise NotImplementedError
 
 
-class Selenium(PageInitializer):
+class Selenium(Page):
 
     def initialize(self, web_driver, url):
         web_driver.get(url=url)
@@ -43,9 +43,9 @@ class Selenium(PageInitializer):
         return repr_.format(self.__class__.__name__)
 
 
-class PostValidating(PageInitializer):
+class PostValidating(Page):
 
-    def __init__(self, initializer, validator):
+    def __init__(self, page_initializer, validator):
 
         """
         Extend to include validation.
@@ -54,11 +54,11 @@ class PostValidating(PageInitializer):
 
         Parameters
         ----------
-        initializer : downloadbot.initializers.PageInitializer
+        page_initializer : downloadbot.initializers.Page
         validator : downloadbot.common.automation.validators.PokemonShowdown
         """
 
-        self._initializer = initializer
+        self._page_initializer = page_initializer
         self._validator = validator
 
     def initialize(self, web_driver, url):
@@ -72,7 +72,7 @@ class PostValidating(PageInitializer):
             If the room has expired.
         """
 
-        self._initializer.initialize(web_driver=web_driver, url=url)
+        self._page_initializer.initialize(web_driver=web_driver, url=url)
 
         try:
             self._validator.check_room_was_entered()
@@ -86,7 +86,7 @@ class PostValidating(PageInitializer):
                 raise exceptions.RoomExpired(message)
 
     def __repr__(self):
-        repr_ = '{}(initializer={}, validator={})'
+        repr_ = '{}(page_initializer={}, validator={})'
         return repr_.format(self.__class__.__name__,
-                            self._initializer,
+                            self._page_initializer,
                             self._validator)
