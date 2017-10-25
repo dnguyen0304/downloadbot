@@ -30,7 +30,7 @@ class ButtonFinder(metaclass=abc.ABCMeta):
         raise NotImplementedError
 
 
-class Button(object):
+class Selenium(ButtonFinder):
 
     def __init__(self, wait_context):
 
@@ -43,21 +43,6 @@ class Button(object):
         self._wait_context = wait_context
 
     def find(self, locator):
-
-        """
-        Look for the button specified by the predicate.
-
-        Parameters
-        ----------
-        locator : tuple
-            Two-element tuple. The first element is the select strategy.
-            The second element is the value.
-
-        Returns
-        -------
-        downloadbot.common.lookup.results.Find
-        """
-
         condition = expected_conditions.element_to_be_clickable(
             locator=locator)
         try:
