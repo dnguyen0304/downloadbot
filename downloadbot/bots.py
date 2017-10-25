@@ -52,8 +52,8 @@ class Download(Disposable):
         Parameters
         ----------
         web_driver : selenium.webdriver.remote.webdriver.WebDriver
-        initializer : downloadbot.initializers.Page
-        finder : downloadbot.common.automation.finders.Button
+        initializer : downloadbot.page_initializers.PageInitializer
+        finder : downloadbot.common.automation.button_finders.Button
         disposer : downloadbot.common.automation.disposers.WebDriver
         """
 
@@ -154,7 +154,7 @@ class PostValidating(Disposable):
         Parameters
         ----------
         bot : downloadbot.bots.Disposable
-        file_path_finder : downloadbot.finders.Finder
+        file_path_finder : downloadbot.file_path_finders.FilePathFinder
         """
 
         self._bot = bot
