@@ -71,6 +71,7 @@ class Download(Disposable):
             If the battle has not yet completed.
         """
 
+        # TODO(duy): This raises an unhandled AutomationFailed exception.
         self._initializer.initialize(web_driver=self._web_driver, url=url)
         result = self._finder.find(locator=self._LOCATOR)
         try:
@@ -134,57 +135,6 @@ class Orchestrating(Disposable):
                             self._bot,
                             self._logger,
                             self._policy)
-
-
-class PreValidating(Disposable):
-
-    def __init__(self, bot, validator):
-
-        """
-        Extend to include validation.
-
-        Validation occurs before the bot runs.
-
-        Parameters
-        ----------
-        bot : downloadbot.bots.Disposable
-        validator : downloadbot.common.automation.validators.PokemonShowdown
-        """
-
-        self._bot = bot
-        self._validator = validator
-
-    def run(self, url):
-
-        """
-        Raises
-        ------
-        downloadbot.common.automation.exceptions.ConnectionLost
-            If the connection was not established successfully or was lost.
-        downloadbot.common.automation.exceptions.RoomExpired
-            If the room has expired.
-        """
-
-        try:
-            self._validator.check_room_was_entered()
-        except automation.exceptions.ValidationFailed:
-            try:
-                self._validator.check_connection_exists()
-            except automation.exceptions.ConnectionLost:
-                raise
-            else:
-                message = 'The room has expired.'
-                raise exceptions.RoomExpired(message)
-        self._bot.run(url=url)
-
-    def dispose(self):
-        self._bot.dispose()
-
-    def __repr__(self):
-        repr_ = '{}(bot={}, validator={})'
-        return repr_.format(self.__class__.__name__,
-                            self._bot,
-                            self._validator)
 
 
 class PostValidating(Disposable):
