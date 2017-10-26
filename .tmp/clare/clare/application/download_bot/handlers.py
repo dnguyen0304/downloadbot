@@ -21,7 +21,7 @@ class MarshallingHandler(messaging.consumer.interfaces.IHandler):
         self._strategy = strategy
 
     def handle(self, record):
-        result = self._handler.handle(record=record)
+        result = self._handler.handle(message=record)
         marshalled_result = self._strategy.marshall(result)
         return marshalled_result
 
@@ -58,7 +58,7 @@ class OrchestratingHandler(messaging.consumer.interfaces.IHandler):
 
     def handle(self, record):
         try:
-            self._handler.handle(record=record)
+            self._handler.handle(message=record)
         except retry.exceptions.MaximumRetry as e:
             message = common.logging.utilities.format_exception(e=e)
             self._logger.debug(msg=message)
