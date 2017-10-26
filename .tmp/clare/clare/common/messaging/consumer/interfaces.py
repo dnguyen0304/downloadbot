@@ -38,19 +38,3 @@ class IConsumer(object):
         """
 
         raise NotImplementedError
-
-
-class IHandler(object):
-
-    __metaclass__ = abc.ABCMeta
-
-    @abc.abstractmethod
-    def handle(self, message):
-
-        """
-        Parameters
-        ----------
-        message : clare.common.messaging.models.Message
-        """
-
-        raise NotImplementedError
