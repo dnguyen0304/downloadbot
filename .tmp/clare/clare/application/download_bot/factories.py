@@ -3,23 +3,15 @@
 import collections
 import logging
 
-import selenium.webdriver
-from selenium.webdriver.support.ui import WebDriverWait
-
 from . import adapters
 from . import consumers
 from . import deques
 from . import download_bots
-from . import download_validators
-from . import exceptions
 from . import fetchers
 from . import filters
 from . import handlers
 from . import marshall_strategies
-from . import replay_downloaders
-from clare.common import automation
 from clare.common import messaging
-from clare.common import retry
 from clare.common import utilities
 
 
@@ -87,11 +79,6 @@ class Factory(object):
             countdown_timer=countdown_timer,
             maximum_message_count=self._properties['fetcher']['message_count']['maximum'])
         dependencies['fetcher'] = fetcher
-
-        # Include the URL path decorator.
-        download_bot = download_bots.UrlPathDownloadBot(
-            download_bot=download_bot,
-            root_url=self._properties['root_url'])
 
         # Include logging.
         logger = logging.getLogger(name=self._properties['logger']['name'])

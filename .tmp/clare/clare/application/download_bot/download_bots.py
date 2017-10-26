@@ -3,7 +3,6 @@
 from __future__ import print_function
 
 import collections
-import os
 
 from . import topics
 from clare import common
@@ -108,37 +107,3 @@ class PrintingDownloadBot(object):
     def __repr__(self):
         repr_ = '{}(download_bot={})'
         return repr_.format(self.__class__.__name__, self._download_bot)
-
-
-class UrlPathDownloadBot(object):
-
-    def __init__(self, download_bot, root_url):
-
-        """
-        Parameters
-        ----------
-        download_bot : clare.application.download_bot.download_bots.DownloadBot
-        root_url : str
-        """
-
-        self._download_bot = download_bot
-        self._root_url = root_url
-
-    def run(self, url):
-        url = self._url_join(root_url=self._root_url, path=url)
-        file_path = self._download_bot.run(url=url)
-        return file_path
-
-    @staticmethod
-    def _url_join(root_url, path):
-        url = os.path.join(root_url, path.lstrip('/'))
-        return url
-
-    def dispose(self):
-        self._download_bot.dispose()
-
-    def __repr__(self):
-        repr_ = '{}(download_bot={}, root_url={})'
-        return repr_.format(self.__class__.__name__,
-                            self._download_bot,
-                            self._root_url)

@@ -18,5 +18,5 @@ if __name__ == '__main__':
                                 environment=os.environ)
     bot = bot_factory.create()
 
-    bot.run(url='http://play.pokemonshowdown.com/battle-gen7ou-')
+    bot.run(url='/battle-gen7ou-')
     bot.dispose()

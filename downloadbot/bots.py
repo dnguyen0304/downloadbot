@@ -2,6 +2,7 @@
 
 import abc
 import functools
+import os
 
 from selenium.webdriver.common.by import By
 
@@ -183,3 +184,38 @@ class PostValidating(Disposable):
         return repr_.format(self.__class__.__name__,
                             self._bot,
                             self._file_path_finder)
+
+
+class UrlPathPrepending(Disposable):
+
+    def __init__(self, bot, root_url):
+
+        """
+        Extend to include prepending a URL path.
+
+        Parameters
+        ----------
+        bot : downloadbot.bots.Disposable
+        root_url : str
+        """
+
+        self._bot = bot
+        self._root_url = root_url
+
+    def run(self, url):
+        url = self._url_join(root_url=self._root_url, path=url)
+        self._bot.run(url=url)
+
+    @staticmethod
+    def _url_join(root_url, path):
+        url = os.path.join(root_url, path.lstrip('/'))
+        return url
+
+    def dispose(self):
+        self._bot.dispose()
+
+    def __repr__(self):
+        repr_ = '{}(bot={}, root_url={})'
+        return repr_.format(self.__class__.__name__,
+                            self._bot,
+                            self._root_url)
