@@ -11,7 +11,7 @@ class Handler(metaclass=abc.ABCMeta):
         """
         Parameters
         ----------
-        downloadbot.common.messaging.messages.Message
+        message : downloadbot.common.messaging.messages.Message
 
         Returns
         -------
