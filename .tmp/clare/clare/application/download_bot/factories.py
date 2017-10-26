@@ -6,7 +6,6 @@ import logging
 from . import adapters
 from . import consumers
 from . import deques
-from . import download_bots
 from . import fetchers
 from . import filters
 from . import handlers
