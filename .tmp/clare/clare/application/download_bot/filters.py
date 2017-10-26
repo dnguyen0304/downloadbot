@@ -1,47 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import abc
-
-from clare.common import messaging
-
-
-class BaseFilter(messaging.interfaces.IFilter):
-
-    def filter(self, record):
-        if not self._should_filter(record=record):
-            self._process(record=record)
-            return record
-
-    @abc.abstractmethod
-    def _should_filter(self, record):
-
-        """
-        Parameters
-        ----------
-        record : clare.common.messaging.records.Record
-
-        Returns
-        -------
-        bool
-            True if the record should be filtered.
-        """
-
-        pass
-
-    def _process(self, record):
-
-        """
-        Parameters
-        ----------
-        record : clare.common.messaging.records.Record
-
-        Returns
-        -------
-        clare.common.messaging.records.Record
-        """
-
-        return record
-
 
 class DoublesBattleFilter(BaseFilter):
 
