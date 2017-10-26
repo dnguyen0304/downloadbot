@@ -47,17 +47,17 @@ class Base(messaging.filters.Message):
         return message
 
 
-class DoublesBattle(Base):
+class DoublesMetagame(Base):
 
-    _DOUBLES_NAME = 'doubles'
+    _DOUBLES_METAGAME_NAME = 'doubles'
 
     """
-    Reject all Doubles battles.
+    Reject all battles from the Doubles metagame.
     """
 
     def _should_filter(self, message):
         _, metagame_name, _ = message.body.split('-')
-        if self._DOUBLES_NAME in metagame_name:
+        if self._DOUBLES_METAGAME_NAME in metagame_name:
             return True
         else:
             return False
@@ -104,7 +104,7 @@ class ExceptGeneration7Metagame(Base):
     _GENERATION_7_METAGAME_NAME = 'gen7'
 
     """
-    Accept battles only from Generation 7.
+    Accept battles only from the Generation 7 metagame.
     """
 
     def _should_filter(self, message):

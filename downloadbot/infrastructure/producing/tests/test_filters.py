@@ -12,7 +12,7 @@ class TestDoublesBattle:
         self.filter = None
 
     def setup(self):
-        self.filter = filters.DoublesBattle()
+        self.filter = filters.DoublesMetagame()
 
     def test_doubles_battles_are_filtered(self):
         body = '/battle-foodoubles-0'
