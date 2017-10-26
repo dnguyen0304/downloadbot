@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import abc
+import time
 
 from . import exceptions
 
@@ -57,3 +58,31 @@ class Simple(Consumer):
                             self._receiver,
                             self._handler,
                             self._filters)
+
+
+class Blocking(Consumer):
+
+    def __init__(self, consumer, interval, _sleeper=None):
+
+        """
+        Parameters
+        ----------
+        consumer : downloadbot.common.messaging.consuming.consumers.Consumer
+        interval : float
+            Rate of work. The units are in seconds.
+        """
+
+        self._consumer = consumer
+        self._interval = interval
+        self._sleeper = _sleeper or time
+
+    def consume(self):
+        while True:
+            self._consumer.consume()
+            self._sleeper.sleep(self._interval)
+
+    def __repr__(self):
+        repr_ = '{}(consumer={}, interval={})'
+        return repr_.format(self.__class__.__name__,
+                            self._consumer,
+                            self._interval)
