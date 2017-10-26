@@ -65,6 +65,8 @@ class Blocking(Consumer):
     def __init__(self, consumer, interval, _sleeper=None):
 
         """
+        Extend to include blocking.
+
         Parameters
         ----------
         consumer : downloadbot.common.messaging.consuming.consumers.Consumer
