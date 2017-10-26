@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import logging
+import warnings
 
 import selenium.webdriver
 from selenium.webdriver.support.ui import WebDriverWait
@@ -51,6 +52,13 @@ class ChromeWebDriver:
 
         # Set if the browser should run in headless mode.
         if self._properties['is_headless']:
+            message = ("The Chrome browser cannot download files in headless "
+                       "mode. This is a known issue. This issue is not a bug "
+                       "but a feature for security reasons. See the "
+                       "discussion for more details.\n\n"
+                       "https://bugs.chromium.org/p/chromium/issues/detail?id=696481")
+            warnings.warn(message=message)
+
             chrome_options.add_argument('disable-gpu')
             chrome_options.add_argument('no-sandbox')
             chrome_options.add_argument('headless')
