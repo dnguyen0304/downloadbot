@@ -45,3 +45,19 @@ class Base(messaging.filters.Message):
         """
 
         return message
+
+
+class DoublesBattle(Base):
+
+    _DOUBLES_NAME = 'doubles'
+
+    def _should_filter(self, message):
+        _, metagame_name, _ = message.body.split('-')
+        if self._DOUBLES_NAME in metagame_name:
+            return True
+        else:
+            return False
+
+    def __repr__(self):
+        repr_ = '{}()'
+        return repr_.format(self.__class__.__name__)
