@@ -40,26 +40,6 @@ class IConsumer(object):
         raise NotImplementedError
 
 
-class IFetcher(object):
-
-    __metaclass__ = abc.ABCMeta
-
-    @abc.abstractmethod
-    def fetch(self):
-
-        """
-        Returns
-        -------
-        clare.common.messaging.models.Message
-
-        Raises
-        ------
-        clare.common.messaging.consumer.exceptions.FetchTimeout
-        """
-
-        raise NotImplementedError
-
-
 class IHandler(object):
 
     __metaclass__ = abc.ABCMeta

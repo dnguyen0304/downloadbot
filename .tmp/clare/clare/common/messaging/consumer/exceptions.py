@@ -3,7 +3,3 @@
 
 class DeleteFailed(Exception):
     pass
-
-
-class FetchTimeout(exceptions.Timeout):
-    pass
