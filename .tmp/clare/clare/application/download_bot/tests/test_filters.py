@@ -6,36 +6,6 @@ from .. import filters
 from clare.common import messaging
 
 
-class TestEveryFirstNFilter(object):
-
-    def __init__(self):
-        self.n = None
-        self.filter = None
-        self.record = None
-
-    def setup(self):
-        self.n = len('foo')
-        self.filter = filters.EveryFirstNFilter(n=self.n)
-        self.record = messaging.records.Record(timestamp=None, value=None)
-
-    def test_does_filter_first_n(self):
-        results = (self.filter.filter(message=self.record)
-                   for i
-                   in xrange(self.n))
-        assert_false(any(results))
-
-    def test_does_filter_every_first_n(self):
-        for i in xrange(2):
-            self.test_does_filter_first_n()
-            output = self.filter.filter(message=self.record)
-            assert_is(output, self.record)
-
-    def test_does_not_filter_after_first_n(self):
-        for i in xrange(self.n + 1):
-            output = self.filter.filter(message=self.record)
-        assert_is(output, self.record)
-
-
 class TestExceptGenerationSevenMetagameFilter(object):
 
     def __init__(self):

@@ -51,6 +51,10 @@ class DoublesBattle(Base):
 
     _DOUBLES_NAME = 'doubles'
 
+    """
+    Reject all Doubles battles.
+    """
+
     def _should_filter(self, message):
         _, metagame_name, _ = message.body.split('-')
         if self._DOUBLES_NAME in metagame_name:
@@ -61,3 +65,35 @@ class DoublesBattle(Base):
     def __repr__(self):
         repr_ = '{}()'
         return repr_.format(self.__class__.__name__)
+
+
+class EveryFirstN(Base):
+
+    def __init__(self, n):
+
+        """
+        Reject every first n messages.
+
+        For example, if n is equal to 4, then the 5th, 10th, and so on
+        messages would be accepted.
+
+        Parameters
+        ----------
+        n : int
+            Number of messages to reject before accepting one.
+        """
+
+        self._n = n
+        self._message_count = 0
+
+    def _should_filter(self, message):
+        self._message_count += 1
+        if self._message_count <= self._n:
+            return True
+        else:
+            self._message_count = 0
+            return False
+
+    def __repr__(self):
+        repr_ = '{}(n={})'
+        return repr_.format(self.__class__.__name__, self._n)
