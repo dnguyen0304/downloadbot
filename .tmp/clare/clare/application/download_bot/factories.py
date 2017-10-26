@@ -80,12 +80,6 @@ class Factory(object):
             maximum_message_count=self._properties['fetcher']['message_count']['maximum'])
         dependencies['fetcher'] = fetcher
 
-        # Include logging.
-        logger = logging.getLogger(name=self._properties['logger']['name'])
-        download_bot = download_bots.LoggingDownloadBot(
-            download_bot=download_bot,
-            logger=logger)
-
         # Construct the handler.
         handler = adapters.DownloadBotToHandlerAdapter(
             download_bot=download_bot)
