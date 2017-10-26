@@ -61,3 +61,28 @@ class TestEveryFirstN:
         for i in range(self.n + 1):
             output = self.filter.filter(message=self.message)
         assert_is(output, self.message)
+
+
+class TestExceptGeneration7Metagame(object):
+
+    def __init__(self):
+        self.filter = None
+
+    def setup(self):
+        self.filter = filters.ExceptGeneration7Metagame()
+
+    def test_generation_7_metagame_battle_is_not_filtered(self):
+        body = '/battle-gen7foo-0'
+        input = messaging.messages.Message(id='',
+                                           body=body,
+                                           delivery_receipt='')
+        output = self.filter.filter(message=input)
+        assert_is(output, input)
+
+    def test_non_generation_7_metagame_battle_is_filtered(self):
+        body = '/battle-gen0foo-0'
+        input = messaging.messages.Message(id='',
+                                           body=body,
+                                           delivery_receipt='')
+        output = self.filter.filter(message=input)
+        assert_is_none(output)

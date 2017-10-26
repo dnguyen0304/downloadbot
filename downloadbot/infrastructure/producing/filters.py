@@ -97,3 +97,23 @@ class EveryFirstN(Base):
     def __repr__(self):
         repr_ = '{}(n={})'
         return repr_.format(self.__class__.__name__, self._n)
+
+
+class ExceptGeneration7Metagame(Base):
+
+    _GENERATION_7_METAGAME_NAME = 'gen7'
+
+    """
+    Accept battles only from Generation 7.
+    """
+
+    def _should_filter(self, message):
+        _, metagame_name, _ = message.body.split('-')
+        if metagame_name.startswith(self._GENERATION_7_METAGAME_NAME):
+            return False
+        else:
+            return True
+
+    def __repr__(self):
+        repr_ = '{}()'
+        return repr_.format(self.__class__.__name__)
