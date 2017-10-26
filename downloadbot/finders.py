@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 
 import abc
+import collections
 import os
 
+from . import topics
 from .common import lookup
+from .common import messaging
 from .common import retry
 from .common import utility
 
@@ -82,10 +85,16 @@ class Orchestrating(FilePath):
         try:
             result = self._policy.execute(self._file_path_finder.find)
         except retry.exceptions.MaximumRetry as e:
-            # The expected errors have persisted. Defer to the
-            # fallback.
+            # An expected case has persisted. Defer to the fallback.
             self._logger.error(msg=utility.format_exception(e=e))
             result = lookup.results.Find(value='', zero_value='')
+        else:
+            arguments = collections.OrderedDict()
+            arguments['file_path'] = result.or_zero_value()
+            event = messaging.events.Structured(
+                topic=topics.Topic.REPLAY_DOWNLOADED,
+                arguments=arguments)
+            self._logger.info(msg=event.to_json())
         return result
 
     def __repr__(self):
