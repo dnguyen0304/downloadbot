@@ -10,6 +10,7 @@ import six
 
 from . import exceptions
 from .attempt import Attempt
+from downloadbot.common import io
 from downloadbot.common import utility
 
 
@@ -18,36 +19,7 @@ class Topic(utility.AutomatedEnum):
     ATTEMPT_COMPLETED = ()
 
 
-class IJsonSerializable(object):
-
-    __metaclass__ = abc.ABCMeta
-
-    @abc.abstractmethod
-    def to_json(self):
-
-        """
-        Returns
-        -------
-        str
-        """
-
-        pass
-
-
-class BaseAttemptEvent(IJsonSerializable):
-
-    __metaclass__ = abc.ABCMeta
-
-    @abc.abstractmethod
-    def to_json(self):
-
-        """
-        Returns
-        -------
-        str
-        """
-
-        pass
+class BaseAttemptEvent(io.JsonSerializable, metaclass=abc.ABCMeta):
 
     @staticmethod
     def do_to_json(data):
