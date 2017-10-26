@@ -6,7 +6,7 @@ from .. import filters
 from downloadbot.common import messaging
 
 
-class TestDoublesBattle:
+class TestDoublesMetagame:
 
     def __init__(self):
         self.filter = None
@@ -81,6 +81,31 @@ class TestExceptGeneration7Metagame(object):
 
     def test_non_generation_7_metagame_battle_is_filtered(self):
         body = '/battle-gen0foo-0'
+        input = messaging.messages.Message(id='',
+                                           body=body,
+                                           delivery_receipt='')
+        output = self.filter.filter(message=input)
+        assert_is_none(output)
+
+
+class TestExceptOverusedMetagame:
+
+    def __init__(self):
+        self.filter = None
+
+    def setup(self):
+        self.filter = filters.ExceptOverusedMetagame()
+
+    def test_overused_metagame_battle_is_not_filtered(self):
+        body = '/battle-fooou-0'
+        input = messaging.messages.Message(id='',
+                                           body=body,
+                                           delivery_receipt='')
+        output = self.filter.filter(message=input)
+        assert_is(output, input)
+
+    def test_non_overused_metagame_battle_is_filtered(self):
+        body = '/battle-foobar-0'
         input = messaging.messages.Message(id='',
                                            body=body,
                                            delivery_receipt='')

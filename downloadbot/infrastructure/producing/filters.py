@@ -117,3 +117,23 @@ class ExceptGeneration7Metagame(Base):
     def __repr__(self):
         repr_ = '{}()'
         return repr_.format(self.__class__.__name__)
+
+
+class ExceptOverusedMetagame(Base):
+
+    _OVERUSED_METAGAME_NAME = 'ou'
+
+    """
+    Accept battles only from the Overused metagame.
+    """
+
+    def _should_filter(self, message):
+        _, metagame_name, _ = message.body.split('-')
+        if metagame_name.endswith(self._OVERUSED_METAGAME_NAME):
+            return False
+        else:
+            return True
+
+    def __repr__(self):
+        repr_ = '{}()'
+        return repr_.format(self.__class__.__name__)
