@@ -2,10 +2,10 @@
 
 from nose.tools import assert_equal
 
-from .. import download_bots
+from .. import bots
 
 
-class TestUrlRunPathDownloadBot(object):
+class TestUrlPathPrepending(object):
 
     def __init__(self):
         self.root_url = None
@@ -38,10 +38,6 @@ class TestUrlRunPathDownloadBot(object):
         self.do()
 
     def do(self):
-        download_bot = download_bots.DownloadBot(replay_downloader=None,
-                                                 download_validator=None)
-        download_bot = download_bots.UrlPathDownloadBot(
-            download_bot=download_bot,
-            root_url=self.root_url)
-        url = download_bot._url_join(root_url=self.root_url, path=self.path)
+        bot = bots.UrlPathPrepending(bot=None, root_url=self.root_url)
+        url = bot._prepend_root(path=self.path)
         assert_equal(url, self.url)

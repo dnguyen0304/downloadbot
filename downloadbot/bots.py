@@ -203,12 +203,11 @@ class UrlPathPrepending(Disposable):
         self._root_url = root_url
 
     def run(self, url):
-        url = self._url_join(root_url=self._root_url, path=url)
+        url = self._prepend_root(path=url)
         self._bot.run(url=url)
 
-    @staticmethod
-    def _url_join(root_url, path):
-        url = os.path.join(root_url, path.lstrip('/'))
+    def _prepend_root(self, path):
+        url = os.path.join(self._root_url, path.lstrip('/'))
         return url
 
     def dispose(self):
