@@ -32,16 +32,6 @@ class MarshallingHandler(messaging.consumer.interfaces.IHandler):
                             self._strategy)
 
 
-class NopHandler(messaging.consumer.interfaces.IHandler):
-
-    def handle(self, record):
-        pass
-
-    def __repr__(self):
-        repr_ = '{}()'
-        return repr_.format(self.__class__.__name__)
-
-
 class OrchestratingHandler(messaging.consumer.interfaces.IHandler):
 
     def __init__(self, handler, logger):
