@@ -80,7 +80,7 @@ class Download(Disposable):
         self._page_initializer.initialize(web_driver=self._web_driver, url=url)
         result = self._button_finder.find(locator=self._LOCATOR)
         try:
-            download_button = result.or_error()
+            download_button = result.or_raise()
         except lookup.exceptions.NoResultFound:
             message = 'The battle has not yet completed.'
             raise exceptions.BattleNotCompleted(message)

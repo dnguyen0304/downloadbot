@@ -46,10 +46,11 @@ class Find(object):
 
         return self._value or self._zero_value
 
-    def or_error(self):
+    def or_raise(self):
 
         """
-        Return the target if it was found or raise an error otherwise.
+        Return the target if it was found or raise an exception
+        otherwise.
 
         Returns
         -------

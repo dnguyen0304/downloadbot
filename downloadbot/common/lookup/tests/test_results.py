@@ -40,10 +40,10 @@ class TestFind(object):
     def test_or_error_returns_target_if_found(self):
         result = results.Find(value=self.value,
                               zero_value=self.zero_value)
-        assert_is(result.or_error(), self.value)
+        assert_is(result.or_raise(), self.value)
 
     @raises(exceptions.NoResultFound)
     def test_or_error_raises_no_result_found_if_could_not_be_found(self):
         result = results.Find(value=self.zero_value,
                               zero_value=self.zero_value)
-        result.or_error()
+        result.or_raise()
