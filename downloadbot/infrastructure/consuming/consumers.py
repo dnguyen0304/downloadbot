@@ -1,28 +1,31 @@
 # -*- coding: utf-8 -*-
 
-from clare import common
+from downloadbot.common import utility
+from downloadbot.common.messaging import consuming
 
 
-class OrchestratingConsumer(object):
+class Orchestrating(consuming.consumers.Consumer):
 
     def __init__(self, consumer, logger):
 
         """
+        Extend to include error handling and logging.
+
         Parameters
         ----------
-        consumer : clare.common.messaging.consumer.consumers.Consumer
+        consumer : downloadbot.common.messaging.consuming.consumers.Consumer
         logger : logging.Logger
         """
 
         self._consumer = consumer
         self._logger = logger
 
-    def consume(self, interval, timeout):
+    def consume(self):
         try:
-            self._consumer.consume(interval=interval, timeout=timeout)
+            self._consumer.consume()
         except Exception as e:
-            message = common.logging.utilities.format_exception(e=e)
-            self._logger.exception(msg=message)
+            message = utility.format_exception(e=e)
+            self._logger.critical(msg=message, exc_info=True)
 
     def __repr__(self):
         repr_ = '{}(consumer={}, logger={})'
