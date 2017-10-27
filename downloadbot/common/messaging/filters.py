@@ -43,11 +43,10 @@ class Logging(Message):
     def filter(self, message):
         result = self._message_filter.filter(message=message)
         if result is None:
-            self._logger.debug(
-                msg='The data {} was filtered.'.format(message))
+            template = 'The data {} was filtered by {}.'
         else:
-            self._logger.debug(
-                msg='The data {} was not filtered.'.format(message))
+            template = 'The data {} was not filtered by {}.'
+        self._logger.debug(msg=template.format(message, self._message_filter))
         return result
 
     def __repr__(self):
