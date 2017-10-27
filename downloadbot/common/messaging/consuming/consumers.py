@@ -8,8 +8,8 @@ from . import exceptions
 
 class Consumer(metaclass=abc.ABCMeta):
 
-    # Should this raise an exception when it fails to receive or handle
-    # a message?
+    # Should this instead raise an exception when it fails to receive
+    # or handle a message?
     @abc.abstractmethod
     def consume(self):
 
