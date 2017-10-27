@@ -22,3 +22,36 @@ class Message(metaclass=abc.ABCMeta):
         """
 
         raise NotImplementedError
+
+
+class Logging(Message):
+
+    def __init__(self, message_filter, logger):
+
+        """
+        Component to include logging.
+
+        Parameters
+        ----------
+        message_filter : downloadbot.common.messaging.filters.Message
+        logger : logging.Logger
+        """
+
+        self._message_filter = message_filter
+        self._logger = logger
+
+    def filter(self, message):
+        result = self._message_filter.filter(message=message)
+        if result is None:
+            self._logger.debug(
+                msg='The data {} was filtered.'.format(message))
+        else:
+            self._logger.debug(
+                msg='The data {} was not filtered.'.format(message))
+        return result
+
+    def __repr__(self):
+        repr_ = '{}(message_filter={}, logger={})'
+        return repr_.format(self.__class__.__name__,
+                            self._message_filter,
+                            self._logger)
