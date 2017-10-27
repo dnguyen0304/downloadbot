@@ -3,33 +3,35 @@
 import collections
 
 from . import topics
-from clare import common
+from downloadbot.common import messaging
 
 
-class LoggingDeque(collections.deque):
+class Logging(collections.deque):
 
     def __init__(self, logger):
 
         """
+        Component to include logging.
+
         Parameters
         ----------
         logger : logging.Logger
         """
 
-        super(LoggingDeque, self).__init__()
+        super().__init__()
 
         self._logger = logger
 
     def popleft(self):
-        element = super(LoggingDeque, self).popleft()
+        item = super().popleft()
 
         arguments = collections.OrderedDict()
         arguments['size'] = len(self)
-        event = common.logging.Event(topic=topics.Topic.RECORD_FETCHED,
-                                     arguments=arguments)
+        event = messaging.events.Structured(topic=topics.Topic.RECORD_FETCHED,
+                                            arguments=arguments)
         self._logger.debug(msg=event.to_json())
 
-        return element
+        return item
 
     def __repr__(self):
         repr_ = '{}(logger={})'
