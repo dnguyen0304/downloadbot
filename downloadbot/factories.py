@@ -341,7 +341,7 @@ class DownloadBotApplication:
 
         # Include prepending a URL path.
         bot = bots.UrlPathPrepending(bot=bot,
-                                     root_url=self._properties['bots']['root_url'])
+                                     root_url=self._properties['bot']['root_url'])
 
         # Create the handler.
         handler = consuming.adapters.BotToHandler(bot=bot, logger=logger)
