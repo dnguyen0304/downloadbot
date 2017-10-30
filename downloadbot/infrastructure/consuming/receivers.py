@@ -114,3 +114,51 @@ class ConcurrentLinkedQueue(BaseBuffering):
                             self._queue,
                             self._batch_size_maximum_count,
                             self._countdown_timer)
+
+
+class SqsFifoQueue(BaseBuffering):
+
+    def __init__(self,
+                 sqs_queue,
+                 batch_size_maximum_count,
+                 wait_time_seconds,
+                 _buffer=None):
+
+        """
+        Parameters
+        ----------
+        sqs_queue : boto3.resources.factory.sqs.Queue
+        batch_size_maximum_count : int
+            Maximum size of the batch. The units are in number of
+            messages.
+        wait_time_seconds : int
+            Duration for which to wait. The units are in seconds.
+        """
+
+        self._sqs_queue = sqs_queue
+        self._batch_size_maximum_count = batch_size_maximum_count
+        self._wait_time_seconds = wait_time_seconds
+
+        self._buffer = _buffer if _buffer is not None else collections.deque()
+
+    def _fill_buffer(self):
+        messages = self._sqs_queue.receive_messages(
+            MaxNumberOfMessages=self._batch_size_maximum_count,
+            WaitTimeSeconds=self._wait_time_seconds)
+
+        for message in messages:
+            marshalled = messaging.messages.Message(
+                id=message.message_id,
+                body=message.body,
+                delivery_receipt=message.receipt_handle)
+            self._buffer.append(marshalled)
+
+    def __repr__(self):
+        repr_ = ('{}('
+                 'sqs_queue={}, '
+                 'batch_size_maximum_count={}, '
+                 'wait_time_seconds={})')
+        return repr_.format(self.__class__.__name__,
+                            self._sqs_queue,
+                            self._batch_size_maximum_count,
+                            self._wait_time_seconds)
