@@ -12,6 +12,10 @@ if __name__ == '__main__':
         long_description = file.read()
 
     install_requires = [
+        # This package is needed by the infrastructure layer to
+        # implement consumers that receive messages from AWS Simple
+        # Queue Service (SQS).
+        'boto3==1.4.7',
         # This package is needed by the application layer to
         # implement bots that interact with web pages.
         'selenium==3.5.0',
