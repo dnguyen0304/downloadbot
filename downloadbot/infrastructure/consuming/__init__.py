@@ -3,7 +3,9 @@
 from . import adapters
 from . import consumers
 from . import filters
+from . import receivers
 
 __all__ = ['adapters',
            'consumers',
-           'filters']
+           'filters',
+           'receivers']
