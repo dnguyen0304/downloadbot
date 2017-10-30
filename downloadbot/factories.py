@@ -58,17 +58,17 @@ class Logger:
 
 class ChromeWebDriver:
 
-    def __init__(self, properties, environment):
+    def __init__(self, environment, properties):
 
         """
         Parameters
         ----------
-        properties : collections.Mapping
         environment : collections.Mapping
+        properties : collections.Mapping
         """
 
-        self._properties = properties
         self._environment = environment
+        self._properties = properties
 
     def create(self):
 
@@ -112,10 +112,10 @@ class ChromeWebDriver:
         return chrome_web_driver
 
     def __repr__(self):
-        repr_ = '{}(properties={}, environment={})'
+        repr_ = '{}(environment={}, properties={})'
         return repr_.format(self.__class__.__name__,
-                            self._properties,
-                            self._environment)
+                            self._environment,
+                            self._properties)
 
 
 class Bot:
