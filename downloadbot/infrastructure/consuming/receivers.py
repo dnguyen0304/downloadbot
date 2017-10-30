@@ -186,7 +186,7 @@ class Logging(consuming.receivers.Receiver):
 
         arguments = collections.OrderedDict()
         arguments['message'] = message
-        event = messaging.events.Structured(topic=topics.Topic.MESSAGE_RECEIVED,
+        event = messaging.events.Structured(topic=topics.Topic.ROOM_FOUND,
                                             arguments=arguments)
         self._logger.debug(msg=event.to_json())
 

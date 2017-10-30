@@ -4,4 +4,4 @@ from downloadbot.common import utility
 
 
 class Topic(utility.AutomatedEnum):
-    MESSAGE_RECEIVED = ()
+    ROOM_FOUND = ()
