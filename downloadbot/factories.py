@@ -2,6 +2,7 @@
 
 import logging
 import logging.config
+import threading
 import warnings
 
 import selenium.webdriver
@@ -12,7 +13,9 @@ from . import exceptions
 from . import finders
 from . import initializers
 from .common import automation
+from .common import messaging
 from .common import retry
+from .infrastructure import consuming
 
 
 class Logger:
@@ -251,3 +254,143 @@ class Bot:
         return repr_.format(self.__class__.__name__,
                             self._properties,
                             self._environment)
+
+
+class DownloadBotApplication:
+
+    def __init__(self, infrastructure, environment, properties):
+
+        """
+        Parameters
+        ----------
+        infrastructure : downloadbot.infrastructure.infrastructures.DownloadBot
+        environment : collections.Mapping
+        properties : collections.Mapping
+        """
+
+        self._infrastructure = infrastructure
+        self._environment = environment
+        self._properties = properties
+
+    def create(self):
+
+        """
+        Create the download bot.
+
+        Returns
+        -------
+        threading.Thread
+        """
+
+        dependencies = self.create_dependencies()
+
+        # Create the consumer.
+        consumer = messaging.consuming.consumers.Simple(
+            receiver=dependencies['receiver'],
+            handler=dependencies['handler'],
+            filters=dependencies['filters'])
+
+        # Include blocking.
+        consumer = messaging.consuming.consumers.Blocking(
+            consumer=consumer,
+            interval=self._properties['consumer']['interval'])
+
+        # Include orchestration.
+        logger_factory = Logger(properties=self._properties)
+        logger = logger_factory.create()
+        consumer = consuming.consumers.Orchestrating(consumer=consumer,
+                                                     logger=logger)
+
+        # Create the thread.
+        thread = threading.Thread(name=self._properties['thread']['name'],
+                                  target=consumer.consume)
+        thread.daemon = self._properties['thread']['is_daemon']
+
+        return thread
+
+    def create_dependencies(self):
+
+        """
+        Returns
+        -------
+        collections.MutableMapping
+        """
+
+        dependencies = dict()
+
+        # Create the logger.
+        logger_factory = Logger(properties=self._properties)
+        logger = logger_factory.create()
+
+        # Create the receiver.
+        receiver = self._infrastructure.receiver
+
+        # Include logging.
+        receiver = consuming.receivers.Logging(receiver=receiver,
+                                               logger=logger)
+        dependencies['receiver'] = receiver
+
+        # Create the bot.
+        web_driver_factory = ChromeWebDriver(
+            environment=self._environment,
+            properties=self._properties['bot']['web_driver'])
+        bot_factory = Bot(web_driver_factory=web_driver_factory,
+                          environment=self._environment,
+                          properties=self._properties['bot'])
+        bot = bot_factory.create()
+
+        # Include prepending a URL path.
+        bot = bots.UrlPathPrepending(bot=bot,
+                                     root_url=self._properties['bots']['root_url'])
+
+        # Create the handler.
+        handler = consuming.adapters.BotToHandler(bot=bot, logger=logger)
+        dependencies['handler'] = handler
+
+        # Create the filters.
+        dependencies['filters'] = list()
+
+        # Create the except Generation 7 metagame filter.
+        except_generation_7_metagame = consuming.filters.ExceptGeneration7Metagame()
+        dependencies['filters'].append(except_generation_7_metagame)
+
+        # Create the except Overused metagame filter.
+        except_overused_metagame = consuming.filters.ExceptOverusedMetagame()
+        dependencies['filters'].append(except_overused_metagame)
+
+        # Create the Doubles metagame filter.
+        doubles_metagame = consuming.filters.DoublesMetagame()
+        dependencies['filters'].append(doubles_metagame)
+
+        # Create the every first n filter.
+        every_first_n = consuming.filters.EveryFirstN(
+            n=self._properties['filters'][0]['n'])
+        dependencies['filters'].append(every_first_n)
+
+        # Include logging.
+        dependencies['filters'] = [
+            messaging.filters.Logging(message_filter=message_filter,
+                                      logger=logger)
+            for message_filter
+            in dependencies['filters']]
+
+        return dependencies
+
+    def __repr__(self):
+        repr_ = '{}(infrastructure={}, environment={}, properties={})'
+        return repr_.format(self.__class__.__name__,
+                            self._infrastructure,
+                            self._environment,
+                            self._properties)
+
+
+class Nop(DownloadBotApplication):
+
+    def create_dependencies(self):
+        dependencies = super().create_dependencies()
+
+        # Create the handler.
+        handler = consuming.handlers.Nop()
+        dependencies['handler'] = handler
+
+        return dependencies
