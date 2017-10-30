@@ -120,19 +120,19 @@ class ChromeWebDriver:
 
 class Bot:
 
-    def __init__(self, web_driver_factory, properties, environment):
+    def __init__(self, web_driver_factory, environment, properties):
 
         """
         Parameters
         ----------
         web_driver_factory : downloadbot.factories.ChromeWebDriver
-        properties : collections.Mapping
         environment : collections.Mapping
+        properties : collections.Mapping
         """
 
         self._web_driver_factory = web_driver_factory
-        self._properties = properties
         self._environment = environment
+        self._properties = properties
 
     def create(self):
 
@@ -250,10 +250,10 @@ class Bot:
         return bot
 
     def __repr__(self):
-        repr_ = '{}(properties={}, environment={})'
+        repr_ = '{}(environment={}, properties={})'
         return repr_.format(self.__class__.__name__,
-                            self._properties,
-                            self._environment)
+                            self._environment,
+                            self._properties)
 
 
 class DownloadBotApplication:
