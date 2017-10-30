@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import abc
 import collections
 import queue
 import uuid
@@ -8,7 +9,44 @@ from downloadbot.common import messaging
 from downloadbot.common.messaging import consuming
 
 
-class ConcurrentLinkedQueue(consuming.receivers.Receiver):
+class BaseBuffering(consuming.receivers.Receiver, metaclass=abc.ABCMeta):
+
+    """
+    Classes implementing this abstract base class must define a _buffer
+    field of type collections.deque.
+    """
+
+    def receive(self):
+
+        """
+        If the buffer has messages, then receive from it. If the buffer
+        is empty, then fill from the queue before receiving. Both
+        scenarios wait as specified.
+        """
+
+        if not self._buffer:
+            self._fill_buffer()
+        try:
+            # Remove a message from the head of the buffer.
+            message = self._buffer.popleft()
+        except IndexError:
+            message = 'The receive operation timed out.'
+            raise consuming.exceptions.ReceiveTimeout(message)
+        return message
+
+    @abc.abstractmethod
+    def _fill_buffer(self):
+
+        """
+        Returns
+        -------
+        None
+        """
+
+        raise NotImplementedError
+
+
+class ConcurrentLinkedQueue(BaseBuffering):
 
     def __init__(self,
                  queue,
@@ -31,24 +69,6 @@ class ConcurrentLinkedQueue(consuming.receivers.Receiver):
         self._countdown_timer = countdown_timer
 
         self._buffer = _buffer if _buffer is not None else collections.deque()
-
-    def receive(self):
-
-        """
-        If the buffer has messages, then receive from it. If the buffer
-        is empty, then fill from the queue before receiving. Both
-        scenarios wait as specified.
-        """
-
-        if not self._buffer:
-            self._fill_buffer()
-        try:
-            # Remove a message from the head of the buffer.
-            message = self._buffer.popleft()
-        except IndexError:
-            message = 'The receive operation timed out.'
-            raise consuming.exceptions.ReceiveTimeout(message)
-        return message
 
     def _fill_buffer(self):
         # A deque should not be used instead because its maxlen
@@ -89,7 +109,7 @@ class ConcurrentLinkedQueue(consuming.receivers.Receiver):
         repr_ = ('{}('
                  'queue={}, '
                  'batch_size_maximum_count={}, '
-                 'countdown_timer={}')
+                 'countdown_timer={})')
         return repr_.format(self.__class__.__name__,
                             self._queue,
                             self._batch_size_maximum_count,
