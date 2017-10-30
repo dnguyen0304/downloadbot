@@ -1,22 +1,22 @@
 # -*- coding: utf-8 -*-
 
-import logging.config
 import os
 
 from downloadbot import factories
+from downloadbot import infrastructure
 from downloadbot.common import utility
 
 if __name__ == '__main__':
     properties = utility.get_configuration()
-    logging.config.dictConfig(config=properties['logging'])
 
-    web_driver_factory = factories.ChromeWebDriver(
-        properties=properties['web_driver'],
-        environment=os.environ)
-    bot_factory = factories.Bot(web_driver_factory=web_driver_factory,
-                                properties=properties['bot'],
-                                environment=os.environ)
-    bot = bot_factory.create()
+    infrastructure_factory = infrastructure.factories.DownloadBotInfrastructure(
+        properties=properties)
+    infrastructure = infrastructure_factory.create()
 
-    bot.run(url='/battle-gen7ou-')
-    bot.dispose()
+    application_factory = factories.DownloadBotApplication(
+        infrastructure=infrastructure,
+        environment=os.environ,
+        properties=properties)
+    application = application_factory.create()
+
+    application.start()
