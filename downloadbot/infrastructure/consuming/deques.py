@@ -27,7 +27,7 @@ class Logging(collections.deque):
 
         arguments = collections.OrderedDict()
         arguments['size'] = len(self)
-        event = messaging.events.Structured(topic=topics.Topic.RECORD_FETCHED,
+        event = messaging.events.Structured(topic=topics.Topic.MESSAGE_RECEIVED,
                                             arguments=arguments)
         self._logger.debug(msg=event.to_json())
 
