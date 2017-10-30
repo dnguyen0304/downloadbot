@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from clare.common.messaging import consumer
+from downloadbot.common.messaging import consuming
 
 
-class Nop(consumer.deleters.Deleter):
+class Nop(consuming.deleters.Deleter):
 
     def delete(self, message):
         pass
@@ -13,7 +13,7 @@ class Nop(consumer.deleters.Deleter):
         return repr_.format(self.__class__.__name__)
 
 
-class SqsFifoQueue(consumer.deleters.Deleter):
+class SqsFifoQueue(consuming.deleters.Deleter):
 
     def __init__(self, sqs_queue):
 
@@ -42,12 +42,12 @@ class SqsFifoQueue(consumer.deleters.Deleter):
         try:
             failures = response['Failed']
         except KeyError:
-            # The deletion completed successfully.
+            # The operation completed successfully.
             return
 
-        for failure in failures:
-            if failure['Id'] == message.id:
-                raise consumer.exceptions.DeleteFailed(str(failure))
+        if any(failure['Id'] == message.id for failure in failures):
+            template = 'The delete operation failed for {}.'
+            raise consuming.exceptions.DeleteError(template.format(message))
 
     def __repr__(self):
         repr_ = '{}(sqs_queue={})'
