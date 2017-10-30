@@ -5,6 +5,7 @@ import collections
 import queue
 import uuid
 
+from . import topics
 from downloadbot.common import messaging
 from downloadbot.common.messaging import consuming
 
@@ -162,3 +163,37 @@ class SqsFifoQueue(BaseBuffering):
                             self._sqs_queue,
                             self._batch_size_maximum_count,
                             self._wait_time_seconds)
+
+
+class Logging(consuming.receivers.Receiver):
+
+    def __init__(self, receiver, logger):
+
+        """
+        Component to include logging.
+
+        Parameters
+        ----------
+        receiver : downloadbot.common.messaging.consuming.receivers.Receiver
+        logger : logging.Logger
+        """
+
+        self._receiver = receiver
+        self._logger = logger
+
+    def receive(self):
+        message = self._receiver.receive()
+
+        arguments = collections.OrderedDict()
+        arguments['message'] = message
+        event = messaging.events.Structured(topic=topics.Topic.MESSAGE_RECEIVED,
+                                            arguments=arguments)
+        self._logger.debug(msg=event.to_json())
+
+        return message
+
+    def __repr__(self):
+        repr_ = '{}(receiver={}, logger={})'
+        return repr_.format(self.__class__.__name__,
+                            self._receiver,
+                            self._logger)
