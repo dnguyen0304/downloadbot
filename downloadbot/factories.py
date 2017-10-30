@@ -147,10 +147,6 @@ class Bot:
                             button_finder=button_finder,
                             web_driver_disposer=web_driver_disposer)
 
-        # Include prepending a URL path.
-        bot = bots.UrlPathPrepending(bot=bot,
-                                     root_url=self._properties['root_url'])
-
         # Create the policy.
         stop_strategy = retry.stop_strategies.AfterDuration(
             maximum_duration=self._properties['policy']['stop_strategy']['maximum_duration'])
