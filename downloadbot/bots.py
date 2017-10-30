@@ -108,7 +108,7 @@ class Orchestrating(Disposable):
     def __init__(self, bot, logger, policy):
 
         """
-        Extend to include error handling and logging.
+        Component to include error handling and logging.
 
         Parameters
         ----------
@@ -152,7 +152,7 @@ class PostValidating(Disposable):
     def __init__(self, bot, file_path_finder):
 
         """
-        Extend to include validation.
+        Component to include validation.
 
         Validation occurs after the bot runs.
 
@@ -191,7 +191,7 @@ class UrlPathPrepending(Disposable):
     def __init__(self, bot, root_url):
 
         """
-        Extend to include prepending a URL path.
+        Component to include prepending a URL path.
 
         Parameters
         ----------
