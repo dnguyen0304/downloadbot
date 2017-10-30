@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import logging
+import logging.config
 import warnings
 
 import selenium.webdriver
@@ -12,6 +13,44 @@ from . import finders
 from . import initializers
 from .common import automation
 from .common import retry
+
+
+class Logger:
+
+    def __init__(self, properties):
+
+        """
+        Parameters
+        ----------
+        properties : collections.Mapping
+        """
+
+        self._properties = properties
+
+    def create(self):
+
+        """
+        Returns
+        -------
+        logging.Logger
+
+        Raises
+        ------
+        KeyError
+            If a property or environment variable could not be found.
+        """
+
+        # Set the global configuration options.
+        logging.config.dictConfig(config=self._properties['logging'])
+
+        # Create the logger.
+        logger = logging.getLogger(name=self._properties['logger']['name'])
+
+        return logger
+
+    def __repr__(self):
+        repr_ = '{}(properties={})'
+        return repr_.format(self.__class__.__name__, self._properties)
 
 
 class ChromeWebDriver:
