@@ -384,6 +384,13 @@ class DownloadBotApplication:
             n=self._properties['filters'][0]['n'])
         dependencies['filters'].append(every_first_n)
 
+        # Include deleting.
+        dependencies['filters'] = [
+            consuming.filters.Deleting(message_filter=message_filter,
+                                       deleter=self._infrastructure.deleter)
+            for message_filter
+            in dependencies['filters']]
+
         # Include logging.
         dependencies['filters'] = [
             messaging.filters.Logging(message_filter=message_filter,
