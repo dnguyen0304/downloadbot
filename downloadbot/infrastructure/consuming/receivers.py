@@ -6,8 +6,13 @@ import queue
 import uuid
 
 from . import topics
+from downloadbot.common import io
 from downloadbot.common import messaging
 from downloadbot.common.messaging import consuming
+
+
+class Disposable(consuming.receivers.Receiver, io.Disposable, metaclass=abc.ABCMeta):
+    pass
 
 
 class BaseBuffering(consuming.receivers.Receiver, metaclass=abc.ABCMeta):
