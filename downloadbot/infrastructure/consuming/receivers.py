@@ -6,9 +6,9 @@ import queue
 import uuid
 from http import HTTPStatus as HttpStatus
 
-from . import topics
 from downloadbot.common import io
 from downloadbot.common import messaging
+from downloadbot.common import utility
 from downloadbot.common.messaging import consuming
 
 
@@ -215,15 +215,17 @@ class Logging(Disposable):
         self._logger = logger
 
     def receive(self):
-        message = self._receiver.receive()
-
-        arguments = collections.OrderedDict()
-        arguments['message'] = repr(message)
-        event = messaging.events.Structured(topic=topics.Topic.ROOM_FOUND,
-                                            arguments=arguments)
-        self._logger.debug(msg=event.to_json())
-
-        return message
+        try:
+            message = self._receiver.receive()
+        except consuming.exceptions.ReceiveTimeout as e:
+            # An expected case has occurred. This should be handled
+            # higher up in the stack.
+            self._logger.debug(msg=utility.format_exception(e=e))
+            raise
+        else:
+            msg = 'The message <{}> was received.'.format(repr(message))
+            self._logger.debug(msg=msg)
+            return message
 
     def dispose(self):
         self._receiver.dispose()
