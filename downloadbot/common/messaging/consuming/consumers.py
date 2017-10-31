@@ -70,7 +70,7 @@ class Simple(Disposable):
                             self._filters)
 
 
-class Blocking(Consumer):
+class Blocking(Disposable):
 
     def __init__(self, consumer, interval, _sleeper=None):
 
@@ -79,7 +79,7 @@ class Blocking(Consumer):
 
         Parameters
         ----------
-        consumer : downloadbot.common.messaging.consuming.consumers.Consumer
+        consumer : downloadbot.common.messaging.consuming.consumers.Disposable
         interval : float
             Rate of work. The units are in seconds.
         """
@@ -92,6 +92,9 @@ class Blocking(Consumer):
         while True:
             self._consumer.consume()
             self._sleeper.sleep(self._interval)
+
+    def dispose(self):
+        self._consumer.dispose()
 
     def __repr__(self):
         repr_ = '{}(consumer={}, interval={})'
