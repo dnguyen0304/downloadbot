@@ -50,14 +50,19 @@ class Simple(Disposable):
         try:
             message = self._receiver.receive()
         except exceptions.ReceiveTimeout:
+            # Base Case: receive timeout
+            return
+
+        for filter_ in self._filters:
+            message = filter_.filter(message=message)
+            if message is None:
+                # Base Case: filtered message
+                return
+
+        try:
+            self._handler.handle(message=message)
+        except exceptions.HandleError:
             pass
-        else:
-            for filter_ in self._filters:
-                message = filter_.filter(message=message)
-                if message is None:
-                    break
-            else:
-                self._handler.handle(message=message)
 
     def dispose(self):
         self._receiver.dispose()
