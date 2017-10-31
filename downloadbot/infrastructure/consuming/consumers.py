@@ -4,7 +4,7 @@ from downloadbot.common import utility
 from downloadbot.common.messaging import consuming
 
 
-class Orchestrating(consuming.consumers.Consumer):
+class Orchestrating(consuming.consumers.Disposable):
 
     def __init__(self, consumer, logger):
 
@@ -29,6 +29,9 @@ class Orchestrating(consuming.consumers.Consumer):
             self._logger.critical(msg=message, exc_info=True)
         finally:
             self._logger.debug(msg='The consume operation has completed.')
+
+    def dispose(self):
+        self._consumer.dispose()
 
     def __repr__(self):
         repr_ = '{}(consumer={}, logger={})'
