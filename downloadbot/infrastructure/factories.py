@@ -51,7 +51,7 @@ class _ConcurrentLinkedQueueReceiver:
         Raises
         ------
         KeyError
-            If a property variable could not be found.
+            If an environment or property variable could not be found.
         """
 
         # Create the timer.
@@ -155,7 +155,7 @@ class _SqsFifoQueueReceiver:
         Raises
         ------
         KeyError
-            If a property variable could not be found.
+            If an environment or property variable could not be found.
         """
 
         return consuming.receivers.SqsFifoQueue(
@@ -218,7 +218,7 @@ class _QueueAbstractFactory:
         Raises
         ------
         KeyError
-            If a property variable could not be found.
+            If an environment or property variable could not be found.
         """
 
         # Create the queue.
@@ -254,7 +254,7 @@ class _QueueAbstractFactory:
         Raises
         ------
         KeyError
-            If a property variable could not be found.
+            If an environment or property variable could not be found.
         """
 
         # Create the SQS FIFO queue resource.
