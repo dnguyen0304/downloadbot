@@ -120,17 +120,23 @@ class ChromeWebDriver:
 
 class Bot:
 
-    def __init__(self, web_driver_factory, environment, properties):
+    def __init__(self,
+                 web_driver_factory,
+                 logger_factory,
+                 environment,
+                 properties):
 
         """
         Parameters
         ----------
         web_driver_factory : downloadbot.factories.ChromeWebDriver
+        logger_factory : downloadbot.factories.Logger
         environment : collections.Mapping
         properties : collections.Mapping
         """
 
         self._web_driver_factory = web_driver_factory
+        self._logger_factory = logger_factory
         self._environment = environment
         self._properties = properties
 
@@ -148,7 +154,7 @@ class Bot:
         """
 
         # Create the logger.
-        logger = logging.getLogger(name=self._properties['logger']['name'])
+        logger = self._logger_factory.create()
 
         # Create the web driver.
         web_driver = self._web_driver_factory.create()
@@ -250,8 +256,14 @@ class Bot:
         return bot
 
     def __repr__(self):
-        repr_ = '{}(environment={}, properties={})'
+        repr_ = ('{}('
+                 'web_driver_factory={}, '
+                 'logger_factory={}, '
+                 'environment={}, '
+                 'properties={})')
         return repr_.format(self.__class__.__name__,
+                            self._web_driver_factory,
+                            self._logger_factory,
                             self._environment,
                             self._properties)
 
