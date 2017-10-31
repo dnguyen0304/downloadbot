@@ -13,7 +13,7 @@ class Orchestrating(consuming.consumers.Disposable):
 
         Parameters
         ----------
-        consumer : downloadbot.common.messaging.consuming.consumers.Consumer
+        consumer : downloadbot.common.messaging.consuming.consumers.Disposable
         logger : logging.Logger
         """
 
