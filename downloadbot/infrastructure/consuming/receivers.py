@@ -4,6 +4,7 @@ import abc
 import collections
 import queue
 import uuid
+from http import HTTPStatus as HttpStatus
 
 from . import topics
 from downloadbot.common import io
@@ -15,7 +16,7 @@ class Disposable(consuming.receivers.Receiver, io.Disposable, metaclass=abc.ABCM
     pass
 
 
-class BaseBuffering(consuming.receivers.Receiver, metaclass=abc.ABCMeta):
+class BaseBuffering(Disposable, metaclass=abc.ABCMeta):
 
     """
     Classes implementing this abstract base class must define a _buffer
@@ -111,6 +112,9 @@ class ConcurrentLinkedQueue(BaseBuffering):
             # Add a message to the tail of the buffer.
             self._buffer.append(message)
 
+    def dispose(self):
+        pass
+
     def __repr__(self):
         repr_ = ('{}('
                  'queue={}, '
@@ -158,6 +162,30 @@ class SqsFifoQueue(BaseBuffering):
                 body=message.body,
                 delivery_receipt=message.receipt_handle)
             self._buffer.append(marshalled)
+
+    def dispose(self):
+        # Base Case: null or zero-valued buffer
+        if not self._buffer:
+            return
+
+        Entries = [
+            {
+                'Id': message.message_id,
+                'ReceiptHandle': message.receipt_handle,
+                'VisibilityTimeout': 0
+            }
+            for message
+            in self._buffer]
+        response = self._sqs_queue.change_message_visibility_batch(
+            Entries=Entries)
+
+        # What should these do instead?
+        if response['ResponseMetadata']['HTTPStatusCode'] != HttpStatus.OK:
+            pass
+        if 'Failed' in response:
+            # There can be failures even when the call returns an HTTP
+            # status code of 200.
+            pass
 
     def __repr__(self):
         repr_ = ('{}('
