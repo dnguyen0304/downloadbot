@@ -3,6 +3,7 @@
 import os
 
 from downloadbot import factories
+from downloadbot import infrastructure
 from downloadbot.common import utility
 
 
@@ -37,5 +38,36 @@ def start_bot():
     bot.run(url='')
 
 
+def start_application():
+
+    """
+    Start the application.
+
+    Returns
+    -------
+    None
+
+    Raises
+    ------
+    KeyError
+        If an environment or property variable could not be found.
+    """
+
+    environment = os.environ
+    properties = utility.get_configuration()
+
+    infrastructure_factory = infrastructure.factories.DownloadBotInfrastructure(
+        properties=properties)
+    infrastructure_ = infrastructure_factory.create()
+
+    application_factory = factories.DownloadBotApplication(
+        infrastructure=infrastructure_,
+        environment=environment,
+        properties=properties)
+    application = application_factory.create()
+
+    application.start()
+
+
 if __name__ == '__main__':
-    start_bot()
+    start_application()
