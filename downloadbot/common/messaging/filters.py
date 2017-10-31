@@ -43,9 +43,9 @@ class Logging(Message):
     def filter(self, message):
         result = self._message_filter.filter(message=message)
         if result is None:
-            template = 'The data {} was filtered by {}.'
+            template = 'The data <{}> was filtered by <{}>.'
         else:
-            template = 'The data {} was not filtered by {}.'
+            template = 'The data <{}> was not filtered by <{}>.'
         self._logger.debug(msg=template.format(message, self._message_filter))
         return result
 
