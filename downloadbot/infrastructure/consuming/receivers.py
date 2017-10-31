@@ -170,8 +170,8 @@ class SqsFifoQueue(BaseBuffering):
 
         Entries = [
             {
-                'Id': message.message_id,
-                'ReceiptHandle': message.receipt_handle,
+                'Id': message.id,
+                'ReceiptHandle': message.delivery_receipt,
                 'VisibilityTimeout': 0
             }
             for message
