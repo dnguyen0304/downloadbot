@@ -21,11 +21,14 @@ class Orchestrating(consuming.consumers.Consumer):
         self._logger = logger
 
     def consume(self):
+        self._logger.debug(msg='The consume operation has started.')
         try:
             self._consumer.consume()
         except Exception as e:
             message = utility.format_exception(e=e)
             self._logger.critical(msg=message, exc_info=True)
+        finally:
+            self._logger.debug(msg='The consume operation has completed.')
 
     def __repr__(self):
         repr_ = '{}(consumer={}, logger={})'
