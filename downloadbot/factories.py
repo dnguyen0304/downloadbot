@@ -40,7 +40,7 @@ class Logger:
         Raises
         ------
         KeyError
-            If a property or environment variable could not be found.
+            If an environment or property variable could not be found.
         """
 
         # Set the global configuration options.
@@ -80,7 +80,7 @@ class ChromeWebDriver:
         Raises
         ------
         KeyError
-            If a property or environment variable could not be found.
+            If an environment or property variable could not be found.
         """
 
         # Create the web driver configuration.
@@ -150,7 +150,7 @@ class Bot:
         Raises
         ------
         KeyError
-            If a property or environment variable could not be found.
+            If an environment or property variable could not be found.
         """
 
         # Create the logger.

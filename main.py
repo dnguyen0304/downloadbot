@@ -18,7 +18,7 @@ def start_bot():
     Raises
     ------
     KeyError
-        If a property or environment variable could not be found.
+        If an environment or property variable could not be found.
     """
 
     environment = os.environ
