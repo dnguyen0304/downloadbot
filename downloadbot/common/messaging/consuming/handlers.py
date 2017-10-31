@@ -16,6 +16,11 @@ class Handler(metaclass=abc.ABCMeta):
         Returns
         -------
         None
+
+        Raises
+        ------
+        downloadbot.common.messaging.consuming.exceptions.HandleError
+            If there was an error handling the message.
         """
 
         raise NotImplementedError
