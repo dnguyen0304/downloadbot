@@ -3,20 +3,39 @@
 import os
 
 from downloadbot import factories
-from downloadbot import infrastructure
 from downloadbot.common import utility
 
-if __name__ == '__main__':
+
+def start_bot():
+
+    """
+    Start the bot.
+
+    Returns
+    -------
+    None
+
+    Raises
+    ------
+    KeyError
+        If a property or environment variable could not be found.
+    """
+
+    environment = os.environ
     properties = utility.get_configuration()
 
-    infrastructure_factory = infrastructure.factories.DownloadBotInfrastructure(
-        properties=properties)
-    infrastructure = infrastructure_factory.create()
+    logger_factory = factories.Logger(properties=properties)
+    web_driver_factory = factories.ChromeWebDriver(
+        environment=environment,
+        properties=properties['bot']['web_driver'])
+    bot_factory = factories.Bot(logger_factory=logger_factory,
+                                web_driver_factory=web_driver_factory,
+                                environment=environment,
+                                properties=properties['bot'])
+    bot = bot_factory.create()
 
-    application_factory = factories.DownloadBotApplication(
-        infrastructure=infrastructure,
-        environment=os.environ,
-        properties=properties)
-    application = application_factory.create()
+    bot.run(url='')
 
-    application.start()
+
+if __name__ == '__main__':
+    start_bot()
