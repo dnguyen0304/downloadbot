@@ -198,7 +198,7 @@ class SqsFifoQueue(BaseBuffering):
                             self._wait_time_seconds)
 
 
-class Logging(consuming.receivers.Receiver):
+class Logging(Disposable):
 
     def __init__(self, receiver, logger):
 
@@ -207,7 +207,7 @@ class Logging(consuming.receivers.Receiver):
 
         Parameters
         ----------
-        receiver : downloadbot.common.messaging.consuming.receivers.Receiver
+        receiver : downloadbot.infrastructure.consuming.receivers.Disposable
         logger : logging.Logger
         """
 
@@ -224,6 +224,9 @@ class Logging(consuming.receivers.Receiver):
         self._logger.debug(msg=event.to_json())
 
         return message
+
+    def dispose(self):
+        self._receiver.dispose()
 
     def __repr__(self):
         repr_ = '{}(receiver={}, logger={})'
