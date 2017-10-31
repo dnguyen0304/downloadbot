@@ -18,7 +18,7 @@ class Consumer(metaclass=abc.ABCMeta):
 
         Returns
         -------
-        downloadbot.common.messaging.filters.Message
+        None
         """
 
         raise NotImplementedError
