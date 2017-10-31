@@ -26,6 +26,12 @@ class Orchestrating(consuming.consumers.Disposable):
         except Exception as e:
             message = utility.format_exception(e=e)
             self._logger.critical(msg=message, exc_info=True)
+            self.dispose()
+        except KeyboardInterrupt:
+            # In Python 2.5, KeyboardInterrupt was changed to inherit
+            # from BaseException so as not to be accidentally caught by
+            # code that catches Exception.
+            self.dispose()
 
     def dispose(self):
         self._consumer.dispose()
