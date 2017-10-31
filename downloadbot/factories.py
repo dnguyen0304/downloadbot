@@ -345,7 +345,8 @@ class DownloadBotApplication:
         web_driver_factory = ChromeWebDriver(
             environment=self._environment,
             properties=self._properties['bot']['web_driver'])
-        bot_factory = Bot(web_driver_factory=web_driver_factory,
+        bot_factory = Bot(logger_factory=logger_factory,
+                          web_driver_factory=web_driver_factory,
                           environment=self._environment,
                           properties=self._properties['bot'])
         bot = bot_factory.create()
