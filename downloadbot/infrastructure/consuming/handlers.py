@@ -20,6 +20,8 @@ class Acknowledging(consuming.handlers.Handler):
         self._deleter = deleter
 
     def handle(self, message):
+        # Should this instead change the visibility of messages it
+        # failed to process?
         self._handler.handle(message=message)
         try:
             self._deleter.delete(message=message)
