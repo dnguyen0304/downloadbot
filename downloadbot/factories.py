@@ -351,7 +351,7 @@ class Consumer:
                                      root_url=self._properties['bot']['root_url'])
 
         # Create the handler.
-        handler = consuming.adapters.BotToHandler(bot=bot, logger=logger)
+        handler = consuming.adapters.BotToHandler(bot=bot)
 
         # Include acknowledgement.
         handler = consuming.handlers.Acknowledging(
