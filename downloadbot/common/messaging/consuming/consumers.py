@@ -29,14 +29,14 @@ class Disposable(Consumer, io.Disposable, metaclass=abc.ABCMeta):
     pass
 
 
-class Simple(Consumer):
+class Simple(Disposable):
 
     def __init__(self, receiver, handler, filters=None):
 
         """
         Parameters
         ----------
-        receiver : downloadbot.common.messaging.consuming.receivers.Receiver
+        receiver : downloadbot.common.messaging.consuming.receivers.Disposable
         handler : downloadbot.common.messaging.consuming.handlers.Handler
         filters : typing.Iterable[downloadbot.common.messaging.filters.Message]
             Defaults to list.
@@ -58,6 +58,9 @@ class Simple(Consumer):
                     break
             else:
                 self._handler.handle(message=message)
+
+    def dispose(self):
+        self._receiver.dispose()
 
     def __repr__(self):
         repr_ = '{}(receiver={}, handler={}, filters={})'
