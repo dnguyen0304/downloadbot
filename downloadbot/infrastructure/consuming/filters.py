@@ -141,28 +141,28 @@ class ExceptOverusedMetagame(Base):
 
 class Deleting(messaging.filters.Message):
 
-    def __init__(self, filter, deleter):
+    def __init__(self, message_filter, deleter):
 
         """
         Component to include deleting.
 
         Parameters
         ----------
-        filter : downloadbot.common.messaging.filters.Message
+        message_filter : downloadbot.common.messaging.filters.Message
         deleter : downloadbot.common.messaging.consuming.deleters.Deleter
         """
 
-        self._filter = filter
+        self._message_filter = message_filter
         self._deleter = deleter
 
     def filter(self, message):
-        result = self._filter.filter(message=message)
+        result = self._message_filter.filter(message=message)
         if result is None:
             self._deleter.delete(message=message)
         return result
 
     def __repr__(self):
-        repr_ = '{}(filter={}, deleter={})'
+        repr_ = '{}(message_filter={}, deleter={})'
         return repr_.format(self.__class__.__name__,
-                            self._filter,
+                            self._message_filter,
                             self._deleter)
