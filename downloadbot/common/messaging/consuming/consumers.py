@@ -4,6 +4,7 @@ import abc
 import time
 
 from . import exceptions
+from downloadbot.common import io
 
 
 class Consumer(metaclass=abc.ABCMeta):
@@ -22,6 +23,10 @@ class Consumer(metaclass=abc.ABCMeta):
         """
 
         raise NotImplementedError
+
+
+class Disposable(Consumer, io.Disposable, metaclass=abc.ABCMeta):
+    pass
 
 
 class Simple(Consumer):
