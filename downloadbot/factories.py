@@ -357,6 +357,11 @@ class DownloadBotApplication:
 
         # Create the handler.
         handler = consuming.adapters.BotToHandler(bot=bot, logger=logger)
+
+        # Include acknowledgement.
+        handler = consuming.handlers.Acknowledging(
+            handler=handler,
+            deleter=self._infrastructure.deleter)
         dependencies['handler'] = handler
 
         # Create the filters.
