@@ -316,7 +316,6 @@ class DownloadBotApplication:
         # Create the thread.
         thread = threading.Thread(name=self._properties['thread']['name'],
                                   target=consumer.consume)
-        thread.daemon = self._properties['thread']['is_daemon']
 
         return thread
 
