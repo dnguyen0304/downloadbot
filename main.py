@@ -38,10 +38,10 @@ def start_bot():
     bot.run(url='')
 
 
-def start_application():
+def start_consumer():
 
     """
-    Start the application.
+    Start the consumer.
 
     Returns
     -------
@@ -60,14 +60,13 @@ def start_application():
         properties=properties)
     infrastructure_ = infrastructure_factory.create()
 
-    application_factory = factories.DownloadBotApplication(
-        infrastructure=infrastructure_,
-        environment=environment,
-        properties=properties)
-    application = application_factory.create()
+    consumer_factory = factories.Consumer(infrastructure=infrastructure_,
+                                          environment=environment,
+                                          properties=properties)
+    consumer = consumer_factory.create()
 
-    application.start()
+    consumer.consume()
 
 
 if __name__ == '__main__':
-    start_application()
+    start_consumer()

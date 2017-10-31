@@ -2,7 +2,6 @@
 
 import logging
 import logging.config
-import threading
 import warnings
 
 import selenium.webdriver
@@ -268,7 +267,7 @@ class Bot:
                             self._properties)
 
 
-class DownloadBotApplication:
+class Consumer:
 
     def __init__(self, infrastructure, environment, properties):
 
@@ -291,7 +290,7 @@ class DownloadBotApplication:
 
         Returns
         -------
-        threading.Thread
+        downloadbot.common.messaging.consuming.consumers.Disposable
         """
 
         dependencies = self.create_dependencies()
@@ -313,11 +312,7 @@ class DownloadBotApplication:
         consumer = consuming.consumers.Orchestrating(consumer=consumer,
                                                      logger=logger)
 
-        # Create the thread.
-        thread = threading.Thread(name=self._properties['thread']['name'],
-                                  target=consumer.consume)
-
-        return thread
+        return consumer
 
     def create_dependencies(self):
 
@@ -408,7 +403,7 @@ class DownloadBotApplication:
                             self._properties)
 
 
-class Nop(DownloadBotApplication):
+class Nop(Consumer):
 
     def create_dependencies(self):
         dependencies = super().create_dependencies()
