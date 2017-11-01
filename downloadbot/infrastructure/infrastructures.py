@@ -3,7 +3,7 @@
 
 class DownloadBot:
 
-    def __init__(self, receiver, deleter):
+    def __init__(self, receiver, deleter, _queue=None):
 
         """
         Parameters
@@ -14,6 +14,7 @@ class DownloadBot:
 
         self.receiver = receiver
         self.deleter = deleter
+        self._queue = _queue
 
     def __repr__(self):
         repr_ = '{}(receiver={}, deleter={})'
