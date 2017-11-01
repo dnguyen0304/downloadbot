@@ -5,7 +5,7 @@ from downloadbot.common.messaging import consuming
 
 class Acknowledging(consuming.handlers.Handler):
 
-    def __init__(self, handler, deleter):
+    def __init__(self, handler, queue_client):
 
         """
         Component to include acknowledgement.
@@ -13,27 +13,57 @@ class Acknowledging(consuming.handlers.Handler):
         Parameters
         ----------
         handler : downloadbot.common.messaging.consuming.handlers.Handler
-        deleter : downloadbot.common.messaging.consuming.deleters.Deleter
+        queue_client: boto3 SQS Queue
         """
 
         self._handler = handler
-        self._deleter = deleter
+        self._queue_client = queue_client
 
     def handle(self, message):
-        # Should this instead change the visibility of messages it
-        # failed to process?
-        self._handler.handle(message=message)
         try:
-            self._deleter.delete(message=message)
-        except consuming.exceptions.DeleteError:
-            # Should this instead raise an exception?
-            pass
+            self._handler.handle(message=message)
+        except (consuming.exceptions.HandleError, KeyboardInterrupt):
+            # The message was not processed successfully.
+            # This smells.
+            self._change_visibility(message)
+            raise
+        else:
+            # The message was processed successfully.
+            self._delete(message=message)
+
+    def _change_visibility(self, message):
+        request = {
+            'Entries': [
+                {
+                    'Id': message.id,
+                    'ReceiptHandle': message.delivery_receipt,
+                    'VisibilityTimeout': 0
+                }
+            ]
+        }
+
+        # This should check for failed requests.
+        self._queue_client.change_message_visibility_batch(**request)
+
+    # This duplicates SqsFifoQueue Deleter.
+    def _delete(self, message):
+        request = {
+            'Entries': [
+                {
+                    'Id': message.id,
+                    'ReceiptHandle': message.delivery_receipt
+                }
+            ]
+        }
+
+        # This should check for failed requests.
+        self._queue_client.delete_messages(**request)
 
     def __repr__(self):
-        repr_ = '{}(handler={}, deleter={})'
+        repr_ = '{}(handler={}, queue_client={})'
         return repr_.format(self.__class__.__name__,
                             self._handler,
-                            self._deleter)
+                            self._queue_client)
 
 
 class Nop(consuming.handlers.Handler):

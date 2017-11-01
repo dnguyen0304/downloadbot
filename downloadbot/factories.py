@@ -10,6 +10,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from . import bots
 from . import exceptions
 from . import finders
+from . import infrastructure
 from . import initializers
 from .common import automation
 from .common import messaging
@@ -354,9 +355,11 @@ class Consumer:
         handler = consuming.adapters.BotToHandler(bot=bot)
 
         # Include acknowledgement.
-        handler = consuming.handlers.Acknowledging(
-            handler=handler,
-            deleter=self._infrastructure.deleter)
+        queue_client_factory = infrastructure.factories._SqsFifoQueue(
+            properties=self._properties['queues']['consume_from'])
+        queue_client = queue_client_factory.create()
+        handler = consuming.handlers.Acknowledging(handler=handler,
+                                                   queue_client=queue_client)
         dependencies['handler'] = handler
 
         # Create the filters.
