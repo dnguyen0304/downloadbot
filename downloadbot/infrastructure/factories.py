@@ -89,7 +89,7 @@ class _ConcurrentLinkedQueueDeleter:
 
 class _SqsFifoQueue:
 
-    SERVICE_NAME = 'sqs'
+    _SERVICE_NAME = 'sqs'
 
     def __init__(self, properties):
 
@@ -106,8 +106,7 @@ class _SqsFifoQueue:
         """
         Returns
         -------
-        str
-            URL to the existing queue resource.
+        boto3 SQS Queue
 
         Raises
         ------
@@ -118,13 +117,20 @@ class _SqsFifoQueue:
 
         session = boto3.session.Session(
             profile_name=self._properties['profile.name'])
-        client = session.client(service_name=_SqsFifoQueue.SERVICE_NAME)
+        client = session.client(service_name=_SqsFifoQueue._SERVICE_NAME)
         response = client.get_queue_url(QueueName=self._properties['name'])
 
         if response['ResponseMetadata']['HTTPStatusCode'] != HttpStatus.OK:
             raise Exception(response['Error'])
 
-        return response['QueueUrl']
+        # Create the SQS FIFO queue resource.
+        sqs_resource = session.resource(
+            service_name=_SqsFifoQueue._SERVICE_NAME)
+
+        # Create the SQS FIFO queue from which to consume.
+        sqs_queue = sqs_resource.Queue(url=response['QueueUrl'])
+
+        return sqs_queue
 
     def __repr__(self):
         repr_ = '{}(properties={})'
@@ -257,17 +263,10 @@ class _QueueAbstractFactory:
             If an environment or property variable could not be found.
         """
 
-        # Create the SQS FIFO queue resource.
+        # Create the queue.
         queue_factory = _SqsFifoQueue(
             properties=properties['queues']['consume_from'])
-        queue_url = queue_factory.create()
-
-        # Create the SQS FIFO queue from which to consume.
-        session = boto3.session.Session(
-            profile_name=properties['queues']['consume_from']['profile.name'])
-        sqs_resource = session.resource(
-            service_name=_SqsFifoQueue.SERVICE_NAME)
-        sqs_queue = sqs_resource.Queue(url=queue_url)
+        sqs_queue = queue_factory.create()
 
         # Create the receiver factory.
         receiver_factory = _SqsFifoQueueReceiver(
