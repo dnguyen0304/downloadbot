@@ -28,6 +28,7 @@ class Orchestrating(consuming.consumers.Disposable):
             self._logger.critical(msg=message, exc_info=True)
             self.dispose()
         except KeyboardInterrupt:
+            # This smells.
             # In Python 2.5, KeyboardInterrupt was changed to inherit
             # from BaseException so as not to be accidentally caught by
             # code that catches Exception.
