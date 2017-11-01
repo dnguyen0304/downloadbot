@@ -6,15 +6,17 @@ import abc
 class Uploader(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
-    def upload(self, path):
+    def upload(self, source, destination):
 
         """
         Upload a local file to a remote repository.
 
         Parameters
         ----------
-        path : str
-            Full path to a file.
+        source : str
+            Full path from where the file should be read.
+        destination : str
+            Full path to where the file should be written.
 
         Returns
         -------
