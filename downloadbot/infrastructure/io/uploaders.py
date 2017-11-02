@@ -53,3 +53,27 @@ class S3(Uploader):
     def __repr__(self):
         repr_ = '{}(client={})'
         return repr_.format(self.__class__.__name__, self._client)
+
+
+class Deleting(Uploader):
+
+    def __init__(self, uploader):
+
+        """
+        Component to include deleting.
+
+        Parameters
+        ----------
+        uploader : downloadbot.infrastructure.io.uploaders.Uploader
+        """
+
+        self._uploader = uploader
+
+    def upload(self, source, destination):
+        self._uploader.upload(source=source, destination=destination)
+        if os.path.isfile(source):
+            os.remove(source)
+
+    def __repr__(self):
+        repr_ = '{}(uploader={})'
+        return repr_.format(self.__class__.__name__, self._uploader)
