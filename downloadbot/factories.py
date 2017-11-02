@@ -58,17 +58,15 @@ class Logger:
 
 class ChromeWebDriver:
 
-    def __init__(self, environment, properties):
+    def __init__(self, environment):
 
         """
         Parameters
         ----------
         environment : collections.Mapping
-        properties : collections.Mapping
         """
 
         self._environment = environment
-        self._properties = properties
 
     def create(self):
 
@@ -99,10 +97,8 @@ class ChromeWebDriver:
         return chrome_web_driver
 
     def __repr__(self):
-        repr_ = '{}(environment={}, properties={})'
-        return repr_.format(self.__class__.__name__,
-                            self._environment,
-                            self._properties)
+        repr_ = '{}(environment={})'
+        return repr_.format(self.__class__.__name__, self._environment)
 
 
 class Bot:
@@ -342,9 +338,7 @@ class Consumer:
         dependencies['receiver'] = receiver
 
         # Create the web driver factory.
-        web_driver_factory = ChromeWebDriver(
-            environment=self._environment,
-            properties=self._properties['bot']['web_driver'])
+        web_driver_factory = ChromeWebDriver(environment=self._environment)
 
         # Create the infrastructure.
         infrastructure_factory = infrastructure.factories.BotInfrastructure(
