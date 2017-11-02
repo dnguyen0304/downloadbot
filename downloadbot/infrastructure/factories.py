@@ -379,9 +379,13 @@ class DownloadBotInfrastructure:
         # Create the deleter.
         deleter = queue_factory.create_deleter()
 
+        # Create the S3 client.
+        s3_client = ObjectStorage(self._properties['object_store']).create()
+
         # Create the infrastructure.
         infrastructure = infrastructures.DownloadBot(receiver=receiver,
-                                                     deleter=deleter)
+                                                     deleter=deleter,
+                                                     s3_client=s3_client)
 
         return infrastructure
 
