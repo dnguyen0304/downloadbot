@@ -46,6 +46,15 @@ tag=${DOMAIN}/${NAMESPACE}-runtime:${VERSION}
 if [ ! -z $(sudo docker images --quiet ${tag}) ]; then
     docker rmi --force ${tag}
 fi
+docker build \
+    --file docker/runtime/Dockerfile \
+    --tag ${tag} \
+    --build-arg DOMAIN=${DOMAIN} \
+    --build-arg NAMESPACE=${NAMESPACE} \
+    --build-arg BASE_IMAGE_VERSION=${RUNTIME_BASE_IMAGE_VERSION} \
+    --build-arg NAMESPACE=${NAMESPACE} \
+    .
+
 if [ "${for_testing}" = true ]; then
     docker build \
         --file docker/runtime/testing/Dockerfile \
@@ -53,17 +62,5 @@ if [ "${for_testing}" = true ]; then
         --build-arg DOMAIN=${DOMAIN} \
         --build-arg NAMESPACE=${NAMESPACE} \
         --build-arg BASE_IMAGE_VERSION=${RUNTIME_BASE_IMAGE_VERSION} \
-        .
-else
-    # This must pass the NAMESPACE build argument twice. See the
-    # documentation for more details.
-    # https://docs.docker.com/engine/reference/builder/#understand-how-arg-and-from-interact
-    docker build \
-        --file docker/runtime/Dockerfile \
-        --tag ${tag} \
-        --build-arg DOMAIN=${DOMAIN} \
-        --build-arg NAMESPACE=${NAMESPACE} \
-        --build-arg BASE_IMAGE_VERSION=${RUNTIME_BASE_IMAGE_VERSION} \
-        --build-arg NAMESPACE=${NAMESPACE} \
         .
 fi
