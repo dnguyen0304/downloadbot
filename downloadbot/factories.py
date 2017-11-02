@@ -352,12 +352,20 @@ class Consumer:
                                                logger=logger)
         dependencies['receiver'] = receiver
 
-        # Create the bot.
+        # Create the web driver factory.
         web_driver_factory = ChromeWebDriver(
             environment=self._environment,
             properties=self._properties['bot']['web_driver'])
+
+        # Create the infrastructure.
+        infrastructure_factory = infrastructure.factories.BotInfrastructure(
+            properties=self._properties)
+        infrastructure_ = infrastructure_factory.create()
+
+        # Create the bot.
         bot_factory = Bot(logger_factory=logger_factory,
                           web_driver_factory=web_driver_factory,
+                          infrastructure=infrastructure_,
                           environment=self._environment,
                           properties=self._properties['bot'])
         bot = bot_factory.create()
