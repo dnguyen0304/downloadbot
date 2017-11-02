@@ -124,14 +124,16 @@ class Uploading(FilePath):
         self._destination = destination
 
     def find(self):
-        source = self._file_path_finder.find().or_zero_value()
+        result = self._file_path_finder.find()
+        source = result.or_zero_value()
 
         # Base Case: zero value result
         if not source:
-            return
+            return result
 
         destination = os.path.join(self._destination, os.path.basename(source))
         self._uploader.upload(source=source, destination=destination)
+        return result
 
     def __repr__(self):
         repr_ = '{}(file_path_finder={}, uploader={}, destination="{}")'
