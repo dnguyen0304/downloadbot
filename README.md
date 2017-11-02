@@ -1,6 +1,23 @@
 # Download Bot
 A Pokemon Showdown web scraper.
 
+## Getting Started
+1. Build the image.
+```
+sudo ./build.sh
+```
+2. Update the configuration files in the `configuration` directory.
+3. Run the application.
+```
+# NOTE: Remember to replace the <tag> placeholder.
+
+sudo docker run \
+    --rm \
+    --volume $(pwd)/configuration:/etc/opt/roomlistwatcher \
+    --volume $(pwd):/var/opt/roomlistwatcher/log \
+    dnguyen0304/downloadbot-runtime:<tag>
+```
+
 ## Advanced
 ### Testing the application.
 1. Build the image.
