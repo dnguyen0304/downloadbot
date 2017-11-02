@@ -256,6 +256,9 @@ class Bot:
         # Create the uploader.
         uploader = io.uploaders.S3(client=self._infrastructure.s3_client)
 
+        # Include deleting.
+        uploader = io.uploaders.Deleting(uploader=uploader)
+
         # Include uploading.
         file_path_finder = finders.Uploading(
             file_path_finder=file_path_finder,
