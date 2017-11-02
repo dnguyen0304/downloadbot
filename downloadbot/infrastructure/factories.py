@@ -313,6 +313,42 @@ class _QueueAbstractFactory:
                             self._deleter_factory)
 
 
+class ObjectStorage:
+
+    _SERVICE_NAME = 's3'
+
+    def __init__(self, properties):
+
+        """
+        Parameters
+        ----------
+        properties : collections.Mapping
+        """
+
+        self._properties = properties
+
+    def create(self):
+
+        """
+        Returns
+        -------
+        boto3 S3 Client
+        """
+
+        session = boto3.Session(
+            profile_name=self._properties['profile']['name'])
+        client = session.client(service_name=self._SERVICE_NAME)
+
+        # Create the S3 bucket resource.
+        client.create_bucket(Bucket=self._properties['bucket']['name'])
+
+        return client
+
+    def __repr__(self):
+        repr_ = '{}(properties={})'
+        return repr_.format(self.__class__.__name__, self._properties)
+
+
 class DownloadBotInfrastructure:
 
     def __init__(self, properties):
