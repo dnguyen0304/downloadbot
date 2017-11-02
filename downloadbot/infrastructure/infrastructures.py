@@ -18,7 +18,7 @@ class Bot:
         return repr_.format(self.__class__.__name__, self.s3_client)
 
 
-# This could be refactored to provide a queue client.
+# Should this instead provide a queue client?
 class Consumer:
 
     def __init__(self, receiver, deleter):
