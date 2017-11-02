@@ -32,7 +32,7 @@ class Uploader(metaclass=abc.ABCMeta):
         raise NotImplementedError
 
 
-class S3Uploader(Uploader):
+class S3(Uploader):
 
     def __init__(self, client):
 
