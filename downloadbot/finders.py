@@ -103,3 +103,39 @@ class Orchestrating(FilePath):
                             self._file_path_finder,
                             self._logger,
                             self._policy)
+
+
+class Uploading(FilePath):
+
+    def __init__(self, file_path_finder, uploader, destination):
+
+        """
+        Component to include uploading.
+
+        Parameters
+        ----------
+        file_path_finder : downloadbot.finders.FilePath
+        uploader : downloadbot.infrastructure.io.uploaders.Uploader
+        destination : str
+        """
+
+        self._file_path_finder = file_path_finder
+        self._uploader = uploader
+        self._destination = destination
+
+    def find(self):
+        source = self._file_path_finder.find().or_zero_value()
+
+        # Base Case: zero value result
+        if not source:
+            return
+
+        destination = os.path.join(self._destination, os.path.basename(source))
+        self._uploader.upload(source=source, destination=destination)
+
+    def __repr__(self):
+        repr_ = '{}(file_path_finder={}, uploader={}, destination="{}")'
+        return repr_.format(self.__class__.__name__,
+                            self._file_path_finder,
+                            self._uploader,
+                            self._destination)
