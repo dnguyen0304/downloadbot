@@ -25,12 +25,17 @@ def start_bot():
     environment = os.environ
     properties = utility.get_configuration()
 
+    infrastructure_factory = infrastructure.factories.BotInfrastructure(
+        properties=properties)
+    infrastructure_ = infrastructure_factory.create()
+
     logger_factory = factories.Logger(properties=properties)
     web_driver_factory = factories.ChromeWebDriver(
         environment=environment,
         properties=properties['bot']['web_driver'])
     bot_factory = factories.Bot(logger_factory=logger_factory,
                                 web_driver_factory=web_driver_factory,
+                                infrastructure=infrastructure_,
                                 environment=environment,
                                 properties=properties['bot'])
     bot = bot_factory.create()
@@ -56,7 +61,7 @@ def start_consumer():
     environment = os.environ
     properties = utility.get_configuration()
 
-    infrastructure_factory = infrastructure.factories.DownloadBotInfrastructure(
+    infrastructure_factory = infrastructure.factories.ConsumerInfrastructure(
         properties=properties)
     infrastructure_ = infrastructure_factory.create()
 

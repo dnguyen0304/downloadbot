@@ -16,6 +16,7 @@ from .common import automation
 from .common import messaging
 from .common import retry
 from .infrastructure import consuming
+from .infrastructure import io
 
 
 class Logger:
@@ -123,6 +124,7 @@ class Bot:
     def __init__(self,
                  web_driver_factory,
                  logger_factory,
+                 infrastructure,
                  environment,
                  properties):
 
@@ -131,12 +133,14 @@ class Bot:
         ----------
         web_driver_factory : downloadbot.factories.ChromeWebDriver
         logger_factory : downloadbot.factories.Logger
+        infrastructure : downloadbot.infrastructure.infrastructures.Bot
         environment : collections.Mapping
         properties : collections.Mapping
         """
 
         self._web_driver_factory = web_driver_factory
         self._logger_factory = logger_factory
+        self._infrastructure = infrastructure
         self._environment = environment
         self._properties = properties
 
@@ -215,7 +219,7 @@ class Bot:
         # Include orchestration.
         bot = bots.Orchestrating(bot=bot, logger=logger, policy=retry_policy)
 
-        # Create the finder.
+        # Create the file path finder.
         file_path_finder = finders.Newest(
             directory_path=self._environment['DOWNLOAD_DIRECTORY'])
 
@@ -249,6 +253,15 @@ class Bot:
             logger=logger,
             policy=retry_policy)
 
+        # Create the uploader.
+        uploader = io.uploaders.S3(client=self._infrastructure.s3_client)
+
+        # Include uploading.
+        file_path_finder = finders.Uploading(
+            file_path_finder=file_path_finder,
+            uploader=uploader,
+            destination=self._properties['finders']['file_path']['uploader']['destination'])
+
         # Include post-validation.
         bot = bots.PostValidating(bot=bot,
                                   file_path_finder=file_path_finder)
@@ -259,11 +272,13 @@ class Bot:
         repr_ = ('{}('
                  'web_driver_factory={}, '
                  'logger_factory={}, '
+                 'infrastructure={}, '
                  'environment={}, '
                  'properties={})')
         return repr_.format(self.__class__.__name__,
                             self._web_driver_factory,
                             self._logger_factory,
+                            self._infrastructure,
                             self._environment,
                             self._properties)
 
@@ -275,7 +290,7 @@ class Consumer:
         """
         Parameters
         ----------
-        infrastructure : downloadbot.infrastructure.infrastructures.DownloadBot
+        infrastructure : downloadbot.infrastructure.infrastructures.Consumer
         environment : collections.Mapping
         properties : collections.Mapping
         """
