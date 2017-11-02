@@ -21,6 +21,7 @@ ARG LOG_DIRECTORY="/var/opt/${NAMESPACE}/log"
 ENV CONFIGURATION_FILE_PATH="${CONFIGURATION_DIRECTORY}/${CONFIGURATION_FILE_NAME}"
 ENV AWS_CONFIG_FILE="${CONFIGURATION_DIRECTORY}/${AWS_CONFIGURATION_FILE_NAME}"
 ENV AWS_SHARED_CREDENTIALS_FILE="${CONFIGURATION_DIRECTORY}/${AWS_CREDENTIALS_FILE_NAME}"
+ENV DOWNLOAD_DIRECTORY="/var/opt/${NAMESPACE}/tmp"
 
 RUN apt-get update -y && \
     apt-get install -y --no-install-recommends ${BUILDTIME_DEPENDENCIES} ${RUNTIME_DEPENDENCIES}
@@ -29,7 +30,8 @@ RUN useradd ${NAMESPACE}
 
 RUN mkdir ${PACKAGE_DIRECTORY} && \
     mkdir --parent ${CONFIGURATION_DIRECTORY} && \
-    mkdir --parent ${LOG_DIRECTORY}
+    mkdir --parent ${LOG_DIRECTORY} && \
+    mkdir --parent ${DOWNLOAD_DIRECTORY}
 
 WORKDIR ${PACKAGE_DIRECTORY}
 
@@ -45,9 +47,11 @@ RUN wget http://chromedriver.storage.googleapis.com/${CHROME_DRIVER_VERSION}/chr
     rm chromedriver_linux64.zip
 
 RUN chown --recursive ${NAMESPACE}:${NAMESPACE} ${CONFIGURATION_DIRECTORY} && \
-    chown --recursive ${NAMESPACE}:${NAMESPACE} ${LOG_DIRECTORY}
+    chown --recursive ${NAMESPACE}:${NAMESPACE} ${LOG_DIRECTORY} && \
+    chown --recursive ${NAMESPACE}:${NAMESPACE} ${DOWNLOAD_DIRECTORY}
 
 RUN rm -fr /var/lib/apt/lists/*
 
 VOLUME ${CONFIGURATION_DIRECTORY}
 VOLUME ${LOG_DIRECTORY}
+VOLUME ${DOWNLOAD_DIRECTORY}
