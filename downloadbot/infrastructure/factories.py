@@ -384,7 +384,7 @@ class BotInfrastructure:
         return repr_.format(self.__class__.__name__, self._properties)
 
 
-class DownloadBotInfrastructure:
+class ConsumerInfrastructure:
 
     def __init__(self, properties):
 
@@ -401,7 +401,7 @@ class DownloadBotInfrastructure:
         """
         Returns
         -------
-        downloadbot.infrastructure.infrastructures.DownloadBot
+        downloadbot.infrastructure.infrastructures.Consumer
         """
 
         # Create the queue factory.
@@ -415,8 +415,8 @@ class DownloadBotInfrastructure:
         deleter = queue_factory.create_deleter()
 
         # Create the infrastructure.
-        infrastructure = infrastructures.DownloadBot(receiver=receiver,
-                                                     deleter=deleter)
+        infrastructure = infrastructures.Consumer(receiver=receiver,
+                                                  deleter=deleter)
 
         return infrastructure
 

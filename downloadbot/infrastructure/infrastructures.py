@@ -18,7 +18,7 @@ class Bot:
         return repr_.format(self.__class__.__name__, self.s3_client)
 
 
-class DownloadBot:
+class Consumer:
 
     def __init__(self, receiver, deleter):
 
