@@ -56,6 +56,9 @@ docker build \
     .
 
 if [ "${for_testing}" = true ]; then
+    # This must pass the NAMESPACE build argument twice. See the
+    # documentation for more details.
+    # https://docs.docker.com/engine/reference/builder/#understand-how-arg-and-from-interact
     docker build \
         --file docker/runtime/testing/Dockerfile \
         --tag ${tag} \
