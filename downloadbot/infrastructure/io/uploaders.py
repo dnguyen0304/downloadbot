@@ -10,14 +10,14 @@ class Uploader(metaclass=abc.ABCMeta):
     def upload(self, source, destination):
 
         """
-        Upload a local file to a remote repository.
+        Upload a local object to a remote repository.
 
         Parameters
         ----------
         source : str
-            Full path from where the file should be read.
+            Full path from where the object should be read.
         destination : str
-            Full path to where the file should be written.
+            Full path to where the object should be written.
 
         Returns
         -------
