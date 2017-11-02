@@ -9,4 +9,6 @@ docker build \
     --tag dnguyen0304/downloadbot-runtime-base:${TAG} \
     --build-arg NAMESPACE="downloadbot" \
     --build-arg CONFIGURATION_FILE_NAME="application.config" \
+    --build-arg AWS_CONFIGURATION_FILE_NAME="aws.config" \
+    --build-arg AWS_CREDENTIALS_FILE_NAME="aws.credentials" \
     .
