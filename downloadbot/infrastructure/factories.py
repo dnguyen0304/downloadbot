@@ -313,7 +313,7 @@ class _QueueAbstractFactory:
                             self._deleter_factory)
 
 
-class ObjectStorage:
+class S3Client:
 
     _SERVICE_NAME = 's3'
 
@@ -380,7 +380,7 @@ class DownloadBotInfrastructure:
         deleter = queue_factory.create_deleter()
 
         # Create the S3 client.
-        s3_client = ObjectStorage(self._properties['object_store']).create()
+        s3_client = S3Client(self._properties['object_store']).create()
 
         # Create the infrastructure.
         infrastructure = infrastructures.DownloadBot(receiver=receiver,
