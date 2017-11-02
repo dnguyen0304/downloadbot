@@ -2,13 +2,15 @@
 A Pokemon Showdown web scraper.
 
 ## Getting Started
-### Running the application.
-1. Build the image.
+### Building
 ```
 sudo ./build.sh
 ```
-2. Update the configuration files in the `configuration` directory.
-3. Run the application.
+
+### Configuring
+Update the configuration files in the `configuration` directory.
+
+### Running
 ```
 # NOTE: Remember to replace the <tag> placeholder.
 
@@ -19,19 +21,12 @@ sudo docker run \
     dnguyen0304/downloadbot-runtime:<tag>
 ```
 
-### Pushing the buildtime and runtime images.
+### Pushing
 ```
 # NOTE: Remember to replace the <tag> placeholder.
 
 sudo docker push dnguyen0304/downloadbot-buildtime:<tag>
 sudo docker push dnguyen0304/downloadbot-runtime:<tag>
-```
-
-### Pulling the runtime image.
-```
-# NOTE: Remember to replace the <tag> placeholder.
-
-sudo docker pull dnguyen0304/downloadbot-runtime:<tag>
 ```
 
 ## Advanced
