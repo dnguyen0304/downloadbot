@@ -40,6 +40,7 @@ docker run \
     ${NAMESPACE} ${REMOTE_SHARED_VOLUME} ${VERSION}
 
 # Create the container.
+RUNTIME_BASE_IMAGE_VERSION="0.1.0"
 tag=${DOMAIN}/${NAMESPACE}-runtime:${VERSION}
 
 if [ ! -z $(sudo docker images --quiet ${tag}) ]; then
@@ -50,7 +51,7 @@ docker build \
     --tag ${tag} \
     --build-arg DOMAIN=${DOMAIN} \
     --build-arg NAMESPACE=${NAMESPACE} \
-    --build-arg BASE_IMAGE_VERSION=${VERSION} \
+    --build-arg BASE_IMAGE_VERSION=${RUNTIME_BASE_IMAGE_VERSION} \
     --build-arg NAMESPACE=${NAMESPACE} \
     .
 
@@ -60,6 +61,6 @@ if [ "${for_testing}" = true ]; then
         --tag ${tag} \
         --build-arg DOMAIN=${DOMAIN} \
         --build-arg NAMESPACE=${NAMESPACE} \
-        --build-arg BASE_IMAGE_VERSION=${VERSION} \
+        --build-arg BASE_IMAGE_VERSION=${RUNTIME_BASE_IMAGE_VERSION} \
         .
 fi
