@@ -349,6 +349,41 @@ class S3Client:
         return repr_.format(self.__class__.__name__, self._properties)
 
 
+class BotInfrastructure:
+
+    def __init__(self, properties):
+
+        """
+        Parameters
+        ----------
+        properties : collections.Mapping
+        """
+
+        self._properties = properties
+
+    def create(self):
+
+        """
+        Returns
+        -------
+        downloadbot.infrastructure.infrastructures.Bot
+        """
+
+        # Create the S3 client.
+        s3_client_factory = S3Client(
+            properties=self._properties['object_store'])
+        s3_client = s3_client_factory.create()
+
+        # Create the infrastructure.
+        infrastructure = infrastructures.Bot(s3_client=s3_client)
+
+        return infrastructure
+
+    def __repr__(self):
+        repr_ = '{}(properties={})'
+        return repr_.format(self.__class__.__name__, self._properties)
+
+
 class DownloadBotInfrastructure:
 
     def __init__(self, properties):
@@ -379,13 +414,9 @@ class DownloadBotInfrastructure:
         # Create the deleter.
         deleter = queue_factory.create_deleter()
 
-        # Create the S3 client.
-        s3_client = S3Client(self._properties['object_store']).create()
-
         # Create the infrastructure.
         infrastructure = infrastructures.DownloadBot(receiver=receiver,
-                                                     deleter=deleter,
-                                                     s3_client=s3_client)
+                                                     deleter=deleter)
 
         return infrastructure
 
