@@ -90,6 +90,9 @@ class ChromeWebDriver:
             name='prefs',
             value={'download.default_directory': download_directory})
 
+        # Set the browser to be compatible with a virtual display.
+        chrome_options.add_argument('no-sandbox')
+
         # Create the web driver.
         chrome_web_driver = selenium.webdriver.Chrome(
             chrome_options=chrome_options)

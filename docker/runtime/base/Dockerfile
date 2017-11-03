@@ -46,6 +46,21 @@ RUN wget http://chromedriver.storage.googleapis.com/${CHROME_DRIVER_VERSION}/chr
     unzip -q -d /usr/local/bin chromedriver_linux64.zip && \
     rm chromedriver_linux64.zip
 
+# Xvfb is needed to use a non-headless browser without a display.
+#
+# As of 2017-11-02, the Chrome browser cannot download files in headless mode.
+# This is a known issue. This issue is not a bug but a feature for security
+# reasons. See the discussion for more details.
+#
+# The configuration value is the default from xvfb-run.
+#
+# xauth is needed to use xvfb-run.
+#
+# Links
+# - https://bugs.chromium.org/p/chromium/issues/detail?id=696481
+RUN apt-get install -y --no-install-recommends xvfb xauth
+ENV DISPLAY=":99"
+
 RUN chown --recursive ${NAMESPACE}:${NAMESPACE} ${CONFIGURATION_DIRECTORY} && \
     chown --recursive ${NAMESPACE}:${NAMESPACE} ${LOG_DIRECTORY} && \
     chown --recursive ${NAMESPACE}:${NAMESPACE} ${DOWNLOAD_DIRECTORY}

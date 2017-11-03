@@ -17,4 +17,7 @@ RUN unzip -q ${PACKAGE} && \
 
 RUN apt-get purge -y --auto-remove ${BUILDTIME_DEPENDENCIES}
 
-ENTRYPOINT ["python", "./main.py"]
+# Start the virtual display. The shell form of the ENTRYPOINT instruction must
+#     be used. This has not been confirmed.
+# Start the application.
+ENTRYPOINT xvfb-run python main.py
