@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import queue as queuing
+import queue
 from http import HTTPStatus as HttpStatus
 
 import boto3
@@ -20,7 +20,7 @@ class _ConcurrentLinkedQueue:
         queue.Queue
         """
 
-        return queuing.Queue()
+        return queue.Queue()
 
     def __repr__(self):
         repr_ = '{}()'
