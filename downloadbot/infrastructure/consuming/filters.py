@@ -158,7 +158,11 @@ class Deleting(messaging.filters.Message):
     def filter(self, message):
         result = self._message_filter.filter(message=message)
         if result is None:
-            self._deleter.delete(message=message)
+            try:
+                self._deleter.delete(message=message)
+            except messaging.consuming.exceptions.DeleteError:
+                # Should this instead raise an exception when it fails to delete?
+                pass
         return result
 
     def __repr__(self):
