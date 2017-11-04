@@ -22,24 +22,17 @@ class Bot:
 
 class Consumer:
 
-    def __init__(self, queue_client, receiver, deleter):
+    def __init__(self, queue_client, receiver):
 
         """
         Parameters
         ----------
         queue_client : downloadbot.infrastructure.queuing.clients.Client
         receiver : downloadbot.common.messaging.consuming.receivers.Receiver
-        deleter : downloadbot.common.messaging.consuming.deleters.Deleter
         """
 
         self.queue_client = queue_client
         self._receiver = receiver
-        self._deleter = deleter
-
-    @property
-    def deleter(self):
-        warnings.warn('Use the queue_client instead.', DeprecationWarning)
-        return self._deleter
 
     @property
     def receiver(self):
@@ -48,8 +41,7 @@ class Consumer:
         return self._receiver
 
     def __repr__(self):
-        repr_ = '{}(queue_client={}, receiver={}, deleter={})'
+        repr_ = '{}(queue_client={}, receiver={})'
         return repr_.format(self.__class__.__name__,
                             self.queue_client,
-                            self._receiver,
-                            self._deleter)
+                            self._receiver)

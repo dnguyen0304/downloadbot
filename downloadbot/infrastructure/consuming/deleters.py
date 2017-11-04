@@ -3,16 +3,6 @@
 from downloadbot.common.messaging import consuming
 
 
-class Nop(consuming.deleters.Deleter):
-
-    def delete(self, message):
-        pass
-
-    def __repr__(self):
-        repr_ = '{}()'
-        return repr_.format(self.__class__.__name__)
-
-
 class SqsFifoQueue(consuming.deleters.Deleter):
 
     def __init__(self, sqs_queue):
