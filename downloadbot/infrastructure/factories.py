@@ -7,6 +7,7 @@ import boto3
 
 from . import consuming
 from . import infrastructures
+from . import queuing
 from downloadbot.common import utility
 
 
@@ -404,6 +405,12 @@ class ConsumerInfrastructure:
         downloadbot.infrastructure.infrastructures.Consumer
         """
 
+        # Create the queue client.
+        queue_factory = _SqsFifoQueue(
+            properties=self._properties['queues']['consume_from'])
+        sqs_queue = queue_factory.create()
+        queue_client = queuing.clients.SqsFifo(sqs_queue=sqs_queue)
+
         # Create the queue factory.
         queue_factory = _QueueAbstractFactory.new_sqs_fifo(
             properties=self._properties)
@@ -415,7 +422,8 @@ class ConsumerInfrastructure:
         deleter = queue_factory.create_deleter()
 
         # Create the infrastructure.
-        infrastructure = infrastructures.Consumer(receiver=receiver,
+        infrastructure = infrastructures.Consumer(queue_client=queue_client,
+                                                  receiver=receiver,
                                                   deleter=deleter)
 
         return infrastructure
