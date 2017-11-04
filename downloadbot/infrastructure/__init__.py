@@ -8,4 +8,4 @@ from . import queuing
 __all__ = ['consuming',
            'factories',
            'io',
-           'queueing']
+           'queuing']
