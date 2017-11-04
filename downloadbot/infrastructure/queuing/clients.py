@@ -64,6 +64,8 @@ class SqsFifo(Client):
                 }
             ]
         }
+        # See this warning.
+        # http://boto3.readthedocs.io/en/latest/reference/services/sqs.html#SQS.Queue.delete_messages
         response = self._sqs_queue.delete_messages(**request)
         return response
 
@@ -101,8 +103,6 @@ class Logging(Client):
 
     def delete_message(self, message):
         response = self._client.delete_message(message)
-        # See this warning.
-        # http://boto3.readthedocs.io/en/latest/reference/services/sqs.html#SQS.Queue.delete_messages
         if 'Failed' in response:
             template = 'The delete failed. The server responded with {}.'
             self._logger.error(msg=template.format(response))
