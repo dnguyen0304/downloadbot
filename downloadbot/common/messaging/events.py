@@ -26,7 +26,7 @@ class Structured(Event, io.JsonSerializable):
         Parameters
         ----------
         topic : enum.Enum
-        arguments : collections.Mapping
+        arguments : typing.Mapping
         """
 
         self.events_sid = str(uuid.uuid4())

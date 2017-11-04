@@ -25,7 +25,7 @@ class Logger:
         """
         Parameters
         ----------
-        properties : collections.Mapping
+        properties : typing.Mapping
         """
 
         self._properties = properties
@@ -63,7 +63,7 @@ class ChromeWebDriver:
         """
         Parameters
         ----------
-        environment : collections.Mapping
+        environment : typing.Mapping
         """
 
         self._environment = environment
@@ -119,8 +119,8 @@ class Bot:
         web_driver_factory : downloadbot.factories.ChromeWebDriver
         logger_factory : downloadbot.factories.Logger
         infrastructure : downloadbot.infrastructure.infrastructures.Bot
-        environment : collections.Mapping
-        properties : collections.Mapping
+        environment : typing.Mapping
+        properties : typing.Mapping
         """
 
         self._web_driver_factory = web_driver_factory
@@ -280,8 +280,8 @@ class Consumer:
         Parameters
         ----------
         infrastructure : downloadbot.infrastructure.infrastructures.Consumer
-        environment : collections.Mapping
-        properties : collections.Mapping
+        environment : typing.Mapping
+        properties : typing.Mapping
         """
 
         self._infrastructure = infrastructure

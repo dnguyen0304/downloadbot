@@ -36,7 +36,7 @@ class _ConcurrentLinkedQueueReceiver:
         Parameters
         ----------
         queue : queue.Queue
-        properties : collections.Mapping
+        properties : typing.Mapping
         """
 
         self._queue = queue
@@ -80,7 +80,7 @@ class _SqsFifoQueue:
         """
         Parameters
         ----------
-        properties : collections.Mapping
+        properties : typing.Mapping
         """
 
         self._properties = properties
@@ -129,7 +129,7 @@ class _SqsFifoQueueReceiver:
         Parameters
         ----------
         sqs_queue : boto3.resources.factory.sqs.Queue
-        properties : collections.Mapping
+        properties : typing.Mapping
         """
 
         self._sqs_queue = sqs_queue
@@ -171,7 +171,7 @@ class _QueueAbstractFactory:
         """
         Parameters
         ----------
-        properties : collections.Mapping
+        properties : typing.Mapping
 
         Returns
         -------
@@ -203,7 +203,7 @@ class _QueueAbstractFactory:
         """
         Parameters
         ----------
-        properties : collections.Mapping
+        properties : typing.Mapping
 
         Returns
         -------
@@ -258,7 +258,7 @@ class S3Client:
         """
         Parameters
         ----------
-        properties : collections.Mapping
+        properties : typing.Mapping
         """
 
         self._properties = properties
@@ -292,7 +292,7 @@ class BotInfrastructure:
         """
         Parameters
         ----------
-        properties : collections.Mapping
+        properties : typing.Mapping
         """
 
         self._properties = properties
@@ -327,7 +327,7 @@ class ConsumerInfrastructure:
         """
         Parameters
         ----------
-        properties : collections.Mapping
+        properties : typing.Mapping
         """
 
         self._properties = properties
