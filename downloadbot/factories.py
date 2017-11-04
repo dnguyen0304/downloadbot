@@ -392,10 +392,18 @@ class Consumer:
             n=self._properties['filters'][0]['n'])
         dependencies['filters'].append(every_first_n)
 
+        # Create the queue client.
+        queue_client = self._infrastructure.queue_client
+
+        # Include logging.
+        queue_client = infrastructure.queuing.clients.Logging(
+            client=queue_client,
+            logger=logger)
+
         # Include deleting.
         dependencies['filters'] = [
             consuming.filters.Deleting(message_filter=message_filter,
-                                       deleter=self._infrastructure.deleter)
+                                       queue_client=queue_client)
             for message_filter
             in dependencies['filters']]
 
