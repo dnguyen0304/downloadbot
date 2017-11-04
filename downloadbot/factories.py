@@ -364,10 +364,15 @@ class Consumer:
         # Create the handler.
         handler = consuming.adapters.BotToHandler(bot=bot)
 
+        # Create the queue client.
+        queue_client = self._infrastructure.queue_client
+
+        # Include logging.
+        queue_client = infrastructure.queuing.clients.Logging(
+            client=queue_client,
+            logger=logger)
+
         # Include acknowledgement.
-        queue_client_factory = infrastructure.factories._SqsFifoQueue(
-            properties=self._properties['queues']['consume_from'])
-        queue_client = queue_client_factory.create()
         handler = consuming.handlers.Acknowledging(handler=handler,
                                                    queue_client=queue_client)
         dependencies['handler'] = handler
@@ -391,14 +396,6 @@ class Consumer:
         every_first_n = consuming.filters.EveryFirstN(
             n=self._properties['filters'][0]['n'])
         dependencies['filters'].append(every_first_n)
-
-        # Create the queue client.
-        queue_client = self._infrastructure.queue_client
-
-        # Include logging.
-        queue_client = infrastructure.queuing.clients.Logging(
-            client=queue_client,
-            logger=logger)
 
         # Include deleting.
         dependencies['filters'] = [
