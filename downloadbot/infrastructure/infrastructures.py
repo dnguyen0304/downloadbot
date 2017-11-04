@@ -33,7 +33,7 @@ class Consumer:
         """
 
         self.queue_client = queue_client
-        self.receiver = receiver
+        self._receiver = receiver
         self._deleter = deleter
 
     @property
@@ -41,9 +41,15 @@ class Consumer:
         warnings.warn('Use the queue_client instead.', DeprecationWarning)
         return self._deleter
 
+    @property
+    def receiver(self):
+        message = 'The Receiver functionality will be merged into the Client.'
+        warnings.warn(message, FutureWarning)
+        return self._receiver
+
     def __repr__(self):
         repr_ = '{}(queue_client={}, receiver={}, deleter={})'
         return repr_.format(self.__class__.__name__,
                             self.queue_client,
-                            self.receiver,
+                            self._receiver,
                             self._deleter)
