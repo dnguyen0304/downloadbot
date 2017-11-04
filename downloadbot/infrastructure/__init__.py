@@ -2,6 +2,8 @@
 
 from . import consuming
 from . import factories
+from . import io
 
 __all__ = ['consuming',
-           'factories']
+           'factories',
+           'io']
