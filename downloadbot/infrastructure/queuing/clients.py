@@ -24,6 +24,24 @@ class Client(metaclass=abc.ABCMeta):
 
         raise NotImplementedError
 
+    @abc.abstractmethod
+    def change_message_visibility(self, message, timeout):
+
+        """
+        Update the message visibility.
+
+        Parameters
+        ----------
+        message : downloadbot.common.messaging.messages.Message
+        timeout : int
+
+        Returns
+        -------
+        typing.Mapping
+        """
+
+        raise NotImplementedError
+
 
 class SqsFifo(Client):
 
@@ -47,6 +65,19 @@ class SqsFifo(Client):
             ]
         }
         response = self._sqs_queue.delete_messages(**request)
+        return response
+
+    def change_message_visibility(self, message, timeout):
+        request = {
+            'Entries': [
+                {
+                    'Id': message.id,
+                    'ReceiptHandle': message.delivery_receipt,
+                    'VisibilityTimeout': timeout
+                }
+            ]
+        }
+        response = self._sqs_queue.change_message_visibility_batch(**request)
         return response
 
     def __repr__(self):
@@ -75,6 +106,11 @@ class Logging(Client):
         if 'Failed' in response:
             template = 'The delete failed. The server responded with {}.'
             self._logger.error(msg=template.format(response))
+        return response
+
+    def change_message_visibility(self, message, timeout):
+        response = self._client.change_message_visibility(message,
+                                                          timeout=timeout)
         return response
 
     def __repr__(self):
