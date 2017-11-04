@@ -57,3 +57,31 @@ class SqsFifo(Client):
     def __repr__(self):
         repr_ = '{}(sqs_queue={})'
         return repr_.format(self.__class__.__name__, self._sqs_queue)
+
+
+class Logging(Client):
+
+    def __init__(self, client, logger):
+
+        """
+        Parameters
+        ----------
+        client : downloadbot.infrastructure.queuing.clients.Client
+        logger : logging.Logger
+        """
+
+        self._client = client
+        self._logger = logger
+
+    def delete_message(self, message):
+        response = self._client.delete_message(message)
+        if 'Failed' in response:
+            template = 'The delete failed. The server responded with {}.'
+            self._logger.error(msg=template.format(response))
+        return response
+
+    def __repr__(self):
+        repr_ = '{}(client={}, logger={})'
+        return repr_.format(self.__class__.__name__,
+                            self._client,
+                            self._logger)
