@@ -5,7 +5,6 @@ import abc
 
 class Client(metaclass=abc.ABCMeta):
 
-    # This duplicates Deleter.
     # Should this instead return the number of messages that were
     # deleted successfully?
     @abc.abstractmethod
