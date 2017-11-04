@@ -21,10 +21,6 @@ class Client(metaclass=abc.ABCMeta):
         Returns
         -------
         typing.Mapping
-
-        Raises
-        ------
-        downloadbot.common.messaging.consuming.exceptions.DeleteError
         """
 
         raise NotImplementedError
