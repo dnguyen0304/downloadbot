@@ -93,7 +93,7 @@ class SqsFifo(Client):
 
 class Orchestrating(Client):
 
-    def __init__(self, client, policy, logger):
+    def __init__(self, client, retry_policy, logger):
 
         """
         Component to include error handling and logging.
@@ -101,12 +101,12 @@ class Orchestrating(Client):
         Parameters
         ----------
         client : downloadbot.infrastructure.queuing.clients.Client
-        policy : downloadbot.common.retry.policy.Policy
+        retry_policy : downloadbot.common.retry.policy.Policy
         logger : logging.Logger
         """
 
         self._client = client
-        self._policy = policy
+        self._retry_policy = retry_policy
         self._logger = logger
 
     def delete_message(self, message):
@@ -114,7 +114,7 @@ class Orchestrating(Client):
         delete = functools.partial(self._client.delete_message,
                                    message=message)
         try:
-            response = self._policy.execute(delete)
+            response = self._retry_policy.execute(delete)
         except retry.exceptions.MaximumRetry as e:
             # An expected case has persisted.
             self._logger.critical(msg=utility.format_exception(e=e))
@@ -126,8 +126,8 @@ class Orchestrating(Client):
         return response
 
     def __repr__(self):
-        repr_ = '{}(client={}, policy={}, logger={})'
+        repr_ = '{}(client={}, retry_policy={}, logger={})'
         return repr_.format(self.__class__.__name__,
                             self._client,
-                            self._policy,
+                            self._retry_policy,
                             self._logger)
