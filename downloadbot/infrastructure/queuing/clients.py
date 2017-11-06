@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import abc
+import functools
+
+from downloadbot.common import retry
+from downloadbot.common import utility
 
 
 class Client(metaclass=abc.ABCMeta):
@@ -87,25 +91,33 @@ class SqsFifo(Client):
         return repr_.format(self.__class__.__name__, self._sqs_queue)
 
 
-class Logging(Client):
+class Orchestrating(Client):
 
-    def __init__(self, client, logger):
+    def __init__(self, client, policy, logger):
 
         """
+        Component to include error handling and logging.
+
         Parameters
         ----------
         client : downloadbot.infrastructure.queuing.clients.Client
+        policy : downloadbot.common.retry.policy.Policy
         logger : logging.Logger
         """
 
         self._client = client
+        self._policy = policy
         self._logger = logger
 
     def delete_message(self, message):
-        response = self._client.delete_message(message)
-        if 'Failed' in response:
-            template = 'The delete failed. The server responded with {}.'
-            self._logger.error(msg=template.format(response))
+        response = dict()
+        delete = functools.partial(self._client.delete_message,
+                                   message=message)
+        try:
+            response = self._policy.execute(delete)
+        except retry.exceptions.MaximumRetry as e:
+            # An expected case has persisted.
+            self._logger.critical(msg=utility.format_exception(e=e))
         return response
 
     def change_message_visibility(self, message, timeout):
@@ -114,7 +126,8 @@ class Logging(Client):
         return response
 
     def __repr__(self):
-        repr_ = '{}(client={}, logger={})'
+        repr_ = '{}(client={}, policy={}, logger={})'
         return repr_.format(self.__class__.__name__,
                             self._client,
+                            self._policy,
                             self._logger)
