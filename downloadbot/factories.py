@@ -367,9 +367,34 @@ class Consumer:
         # Create the queue client.
         queue_client = self._infrastructure.queue_client
 
+        # Create the continue predicate.
+        def predicate(response):
+            try:
+                return response['Failed'][0]['Code'] == 'InternalError'
+            except KeyError:
+                return False
+
+        # Create the retry policy.
+        stop_strategy = retry.stop_strategies.AfterAttempt(
+            maximum_attempt=self._properties['queue_client']['policy']['stop_strategy']['maximum_attempt'])
+        wait_strategy = retry.wait_strategies.Fixed(
+            wait_time=self._properties['queue_client']['policy']['wait_strategy']['wait_time'])
+        messaging_broker_factory = retry.messaging.broker_factories.Logging(
+            logger=logger)
+        messaging_broker = messaging_broker_factory.create(
+            event_name=self._properties['queue_client']['policy']['messaging_broker']['event']['name'])
+        policy_builder = retry.PolicyBuilder() \
+            .with_stop_strategy(stop_strategy) \
+            .with_wait_strategy(wait_strategy) \
+            .with_messaging_broker(messaging_broker)
+        # Set to continue on HTTP status code 500 Internal Server Error.
+        policy_builder = policy_builder.continue_if_result(predicate=predicate)
+        retry_policy = policy_builder.build()
+
         # Include logging.
-        queue_client = infrastructure.queuing.clients.Logging(
+        queue_client = infrastructure.queuing.clients.Orchestrating(
             client=queue_client,
+            retry_policy=retry_policy,
             logger=logger)
 
         # Include acknowledgement.
