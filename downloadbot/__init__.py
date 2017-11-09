@@ -2,4 +2,5 @@
 
 from . import factories
 
-__all__ = ['factories']
+__all__ = ['factories',
+           'services']
