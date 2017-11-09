@@ -16,3 +16,26 @@ class Model:
     created_by = Column()
     updated_at = Column()
     updated_by = Column()
+
+
+class Replay(Model):
+
+    __tablename__ = 'replays'
+
+    name = Column()
+
+    def __init__(self, name):
+
+        """
+        Replay model.
+
+        Parameters
+        ----------
+        name : str
+        """
+
+        self.name = name
+
+    def __repr__(self):
+        repr_ = '{}(name="{}")'
+        return repr_.format(self.__class__.__name__, self.name)
