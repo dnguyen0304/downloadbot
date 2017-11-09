@@ -7,6 +7,21 @@ from sqlalchemy.ext.declarative import as_declarative
 @as_declarative()
 class Model:
 
+    """
+    Attributes
+    ----------
+    id : int
+        Unique identifier.
+    created_at : datetime.datetime
+        When the entity was originally created.
+    created_by : int
+        Who originally created the entity.
+    updated_at : datetime.datetime
+        When the entity was last updated.
+    updated_by : int
+        Who last updated the entity.
+    """
+
     # This must specify the data type because the primary key is named
     # "id". Not doing so causes SQLAlchemy to raise warnings,
     # CompileErrors, and FlushErrors.
