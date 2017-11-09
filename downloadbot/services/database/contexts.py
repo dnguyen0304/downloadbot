@@ -69,5 +69,5 @@ class SqlAlchemy(Context):
         self._session.commit()
 
     def __repr__(self):
-        repr_ = '{}(session={})'
+        repr_ = '<{}(session={})>'
         return repr_.format(self.__class__.__name__, self._session)
