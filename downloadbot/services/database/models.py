@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from sqlalchemy import Column, Integer
+from sqlalchemy import Column
 from sqlalchemy.ext.declarative import as_declarative
 
 
@@ -10,8 +10,6 @@ class Model:
     """
     Attributes
     ----------
-    id : int
-        Unique identifier.
     created_at : datetime.datetime
         When the entity was originally created.
     created_by : int
@@ -21,11 +19,6 @@ class Model:
     updated_by : int
         Who last updated the entity.
     """
-
-    # This must specify the data type because the primary key is named
-    # "id". Not doing so causes SQLAlchemy to raise warnings,
-    # CompileErrors, and FlushErrors.
-    id = Column(Integer, primary_key=True)
 
     created_at = Column()
     created_by = Column()
