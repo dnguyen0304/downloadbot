@@ -31,7 +31,7 @@ class Event(metaclass=abc.ABCMeta):
 
 class Persistence(Event):
 
-    def __init__(self, event_parser, repository):
+    def __init__(self, event_parser, session):
 
         """
         Handler that writes to persistent storage.
@@ -39,11 +39,11 @@ class Persistence(Event):
         Parameters
         ----------
         event_parser : downloadbot.services.database.parsers.S3ObjectCreatedEvent
-        repository : downloadbot.services.database.repositories.Repository
+        session : sqlalchemy.orm.session.Session
         """
 
         self._event_parser = event_parser
-        self._repository = repository
+        self._session = session
 
     def handle(self, event):
         try:
@@ -55,10 +55,15 @@ class Persistence(Event):
             model = models.Replay(**kwargs)
         except TypeError:
             return
-        self._repository.add(model=model)
+        # This should catch the sqlalchemy.orm.exc.UnmappedInstanceError
+        # exception.
+        self._session.add(model)
+        # This should catch the sqlalchemy.exc.InvalidRequestError
+        # exception.
+        self._session.commit()
 
     def __repr__(self):
-        repr_ = '{}(event_parser={}, repository={})'
+        repr_ = '{}(event_parser={}, session={})'
         return repr_.format(self.__class__.__name__,
                             self._event_parser,
-                            self._repository)
+                            self._session)
