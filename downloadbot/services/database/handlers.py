@@ -63,7 +63,7 @@ class Persistence(Event):
         self._session.commit()
 
     def __repr__(self):
-        repr_ = '{}(event_parser={}, session={})'
+        repr_ = '<{}(event_parser={}, session={})>'
         return repr_.format(self.__class__.__name__,
                             self._event_parser,
                             self._session)

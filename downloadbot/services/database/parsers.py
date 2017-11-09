@@ -36,5 +36,5 @@ class S3ObjectCreatedEvent:
         return processed
 
     def __repr__(self):
-        repr_ = '{}()'
+        repr_ = '<{}()>'
         return repr_.format(self.__class__.__name__)

@@ -47,5 +47,5 @@ class Replay(Model):
         self.name = name
 
     def __repr__(self):
-        repr_ = '{}(name="{}")'
+        repr_ = '<{}(name="{}")>'
         return repr_.format(self.__class__.__name__, self.name)
