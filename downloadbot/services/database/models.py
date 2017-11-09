@@ -30,6 +30,8 @@ class Replay(Model):
 
     __tablename__ = 'replays'
 
+    replays_id = Column(primary_key=True)
+    replays_sid = Column()
     name = Column()
 
     def __init__(self, name):
