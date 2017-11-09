@@ -60,7 +60,7 @@ class TestS3ObjectCreatedEvent:
                             'ownerIdentity': {
                                 'principalId': 'A1RNCHMHBFDO51'
                             },
-                        'arn': 'arn:aws:s3:::io.duynguyen'
+                            'arn': 'arn:aws:s3:::io.duynguyen'
                         },
                         'object': {
                             'key': key,
@@ -73,4 +73,3 @@ class TestS3ObjectCreatedEvent:
             ]
         }
         return source
-

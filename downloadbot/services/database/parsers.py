@@ -38,4 +38,3 @@ class S3ObjectCreatedEvent:
     def __repr__(self):
         repr_ = '{}()'
         return repr_.format(self.__class__.__name__)
-
