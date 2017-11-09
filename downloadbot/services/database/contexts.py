@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import abc
+import random
+import string
+
+_SID_LENGTH = 32
+_SID_CHARACTERS = string.ascii_letters + string.digits
 
 
 class Context(metaclass=abc.ABCMeta):
@@ -71,3 +76,11 @@ class SqlAlchemy(Context):
     def __repr__(self):
         repr_ = '<{}(session={})>'
         return repr_.format(self.__class__.__name__, self._session)
+
+
+def _generate_sid(characters=_SID_CHARACTERS, length=_SID_LENGTH):
+
+    sid = ''.join(random.SystemRandom().choice(characters)
+                  for _
+                  in range(length))
+    return sid
