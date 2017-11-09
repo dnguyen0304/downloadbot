@@ -84,3 +84,16 @@ def _generate_sid(characters=_SID_CHARACTERS, length=_SID_LENGTH):
                   for _
                   in range(length))
     return sid
+
+
+def _set_sid(model, sid):
+
+    result = filter(lambda x: not x.startswith('_') and x.endswith('_sid'),
+                    dir(model))
+    try:
+        attribute = next(result)
+    except StopIteration:
+        template = 'An SID attribute was not found on the model {}.'
+        raise AttributeError(template.format(model))
+
+    setattr(model, attribute, sid)
