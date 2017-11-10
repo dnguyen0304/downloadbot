@@ -42,7 +42,7 @@ class PokemonShowdown(object):
 
         Raises
         ------
-        downloadbot.common.automation.exceptions.ValidationFailed
+        downloadbot.automation.exceptions.ValidationFailed
             If the room was not entered successfully.
         """
 
@@ -64,7 +64,7 @@ class PokemonShowdown(object):
 
         Raises
         ------
-        downloadbot.common.automation.exceptions.ConnectionLost
+        downloadbot.automation.exceptions.ConnectionLost
             If the connection was not established successfully or was lost.
         """
 

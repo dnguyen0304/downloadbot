@@ -73,7 +73,7 @@ class Timestamping(FilePath):
 
         Returns
         -------
-        downloadbot.common.automation.generators.Timestamping
+        downloadbot.automation.generators.Timestamping
         """
 
         directory_path, file_name = os.path.split(file_path)

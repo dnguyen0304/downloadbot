@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from downloadbot.common import automation
+from downloadbot import automation
 from downloadbot.common.messaging import consuming
 
 
