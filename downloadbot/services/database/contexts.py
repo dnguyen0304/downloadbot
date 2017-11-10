@@ -102,7 +102,7 @@ def _set_sid(model, sid):
     setattr(model, attribute, sid)
 
 
-class Defaulting(Context):
+class SidDefaulting(Context):
 
     def __init__(self,
                  context,
