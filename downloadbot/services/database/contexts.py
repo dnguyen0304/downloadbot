@@ -154,3 +154,40 @@ def _set_metadata(entity, entity_state, by):
     elif entity_state.persistent:
         entity.updated_at = datetime.datetime.utcnow()
         entity.updated_by = by
+
+
+class MetadataDefaulting(Context):
+
+    _BY = -1
+
+    def __init__(self, context, _set_metadata=_set_metadata):
+
+        """
+        Component to include default values for metadata fields.
+
+        Parameters
+        ----------
+        context : downloadbot.services.database.contexts.Context
+        """
+
+        self._context = context
+        self._set_metadata = _set_metadata
+
+    def add(self, model):
+        try:
+            # This is a leaky abstraction.
+            entity_state = sqlalchemy.inspect(model)
+        except sqlalchemy.exc.NoInspectionAvailable:
+            pass
+        else:
+            self._set_metadata(entity=model,
+                               entity_state=entity_state,
+                               by=self._BY)
+        self._context.add(model=model)
+
+    def commit(self):
+        self._context.commit()
+
+    def __repr__(self):
+        repr_ = '<{}(context={})>'
+        return repr_.format(self.__class__.__name__, self._context)
