@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import abc
+import datetime
 import random
 import string
 
@@ -142,3 +143,14 @@ class SidDefaulting(Context):
     def __repr__(self):
         repr_ = '<{}(context={})>'
         return repr_.format(self.__class__.__name__, self._context)
+
+
+def _set_metadata(entity, entity_state, by):
+
+    # Should these timestamps instead be time zone-aware?
+    if entity_state.transient:
+        entity.created_at = datetime.datetime.utcnow()
+        entity.created_by = by
+    elif entity_state.persistent:
+        entity.updated_at = datetime.datetime.utcnow()
+        entity.updated_by = by
