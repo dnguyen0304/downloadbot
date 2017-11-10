@@ -107,6 +107,9 @@ class EventHandler:
         # Include default values for metadata fields.
         db_context = contexts.MetadataDefaulting(db_context=db_context)
 
+        # Include logging.
+        db_context = contexts.Logging(db_context=db_context, logger=logger)
+
         # Create the event handler.
         event_handler = handlers.Persistence(event_parser=event_parser,
                                              db_context=db_context)
