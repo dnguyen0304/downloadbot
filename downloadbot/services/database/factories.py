@@ -9,7 +9,7 @@ from . import handlers
 from . import parsers
 
 
-class Handler:
+class EventHandler:
 
     def __init__(self, properties):
 
@@ -62,9 +62,9 @@ class Handler:
         db_context = contexts.MetadataDefaulting(db_context=db_context)
 
         # Create the event handler.
-        handler = handlers.Persistence(event_parser=event_parser,
-                                       db_context=db_context)
-        return handler
+        event_handler = handlers.Persistence(event_parser=event_parser,
+                                             db_context=db_context)
+        return event_handler
 
     def __repr__(self):
         repr_ = '<{}(properties={})>'
