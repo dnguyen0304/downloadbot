@@ -124,11 +124,11 @@ class SidDefaulting(Context):
     def add(self, model):
         try:
             # This is a leaky abstraction.
-            inspector = sqlalchemy.inspect(model)
+            entity_state = sqlalchemy.inspect(model)
         except sqlalchemy.exc.NoInspectionAvailable:
             pass
         else:
-            if inspector.transient:
+            if entity_state.transient:
                 sid = self._generate_sid()
                 try:
                     self._set_sid(model=model, sid=sid)
