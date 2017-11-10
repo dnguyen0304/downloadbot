@@ -4,6 +4,9 @@ import abc
 import random
 import string
 
+import sqlalchemy
+import sqlalchemy.exc
+
 _SID_LENGTH = 32
 _SID_CHARACTERS = string.ascii_letters + string.digits
 
@@ -97,3 +100,45 @@ def _set_sid(model, sid):
         raise AttributeError(template.format(model))
 
     setattr(model, attribute, sid)
+
+
+class Defaulting(Context):
+
+    def __init__(self,
+                 context,
+                 _generate_sid=_generate_sid,
+                 _set_sid=_set_sid):
+
+        """
+        Component to include default values.
+
+        Parameters
+        ----------
+        context : downloadbot.services.database.contexts.Context
+        """
+
+        self._context = context
+        self._generate_sid = _generate_sid
+        self._set_sid = _set_sid
+
+    def add(self, model):
+        try:
+            # This is a leaky abstraction.
+            inspector = sqlalchemy.inspect(model)
+        except sqlalchemy.exc.NoInspectionAvailable:
+            pass
+        else:
+            if inspector.transient:
+                sid = self._generate_sid()
+                try:
+                    self._set_sid(model=model, sid=sid)
+                except AttributeError:
+                    pass
+        self._context.add(model=model)
+
+    def commit(self):
+        self._context.commit()
+
+    def __repr__(self):
+        repr_ = '<{}(context={})>'
+        return repr_.format(self.__class__.__name__, self._context)
