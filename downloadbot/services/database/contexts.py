@@ -160,17 +160,17 @@ class MetadataDefaulting(Context):
 
     _BY = -1
 
-    def __init__(self, context, _set_metadata=_set_metadata):
+    def __init__(self, db_context, _set_metadata=_set_metadata):
 
         """
         Component to include default values for metadata fields.
 
         Parameters
         ----------
-        context : downloadbot.services.database.contexts.Context
+        db_context : downloadbot.services.database.contexts.Context
         """
 
-        self._context = context
+        self._db_context = db_context
         self._set_metadata = _set_metadata
 
     def add(self, model):
@@ -183,11 +183,11 @@ class MetadataDefaulting(Context):
             self._set_metadata(entity=model,
                                entity_state=entity_state,
                                by=self._BY)
-        self._context.add(model=model)
+        self._db_context.add(model=model)
 
     def commit(self):
-        self._context.commit()
+        self._db_context.commit()
 
     def __repr__(self):
-        repr_ = '<{}(context={})>'
-        return repr_.format(self.__class__.__name__, self._context)
+        repr_ = '<{}(db_context={})>'
+        return repr_.format(self.__class__.__name__, self._db_context)
