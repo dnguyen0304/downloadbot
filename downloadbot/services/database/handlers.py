@@ -63,3 +63,31 @@ class Persistence(Event):
         return repr_.format(self.__class__.__name__,
                             self._event_parser,
                             self._db_context)
+
+
+class Logging(Event):
+
+    def __init__(self, event_handler, logger):
+
+        """
+        Component to include logging.
+
+        Parameters
+        ----------
+        event_handler : downloadbot.services.database.handlers.Event
+        logger : logging.Logger
+        """
+
+        self._event_handler = event_handler
+        self._logger = logger
+
+    def handle(self, event):
+        template = 'The event handler {} was invoked by the event {}.'
+        self._logger.debug(msg=template.format(self._event_handler, event))
+        self._event_handler.handle(event=event)
+
+    def __repr__(self):
+        repr_ = '<{}(event_handler={}, logger={})>'
+        return repr_.format(self.__class__.__name__,
+                            self._event_handler,
+                            self._logger)
