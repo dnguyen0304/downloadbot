@@ -1,0 +1,4 @@
+downloadbot.common==0.1.0
+selenium==3.5.0
+six==1.11.0
+SQLAlchemy==1.1.15

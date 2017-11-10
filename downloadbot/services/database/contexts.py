@@ -8,6 +8,9 @@ import string
 import sqlalchemy
 import sqlalchemy.exc
 
+from . import topics
+from downloadbot.common import messaging
+
 _SID_LENGTH = 32
 _SID_CHARACTERS = string.ascii_letters + string.digits
 
@@ -191,3 +194,39 @@ class MetadataDefaulting(Context):
     def __repr__(self):
         repr_ = '<{}(db_context={})>'
         return repr_.format(self.__class__.__name__, self._db_context)
+
+
+class Logging(Context):
+
+    def __init__(self, db_context, logger):
+
+        """
+        Component to include logging.
+
+        Parameters
+        ----------
+        db_context : downloadbot.services.database.contexts.Context
+        logger : logging.Logger
+        """
+
+        self._db_context = db_context
+        self._logger = logger
+
+        # This follows last write wins semantics.
+        self._last_added_model = None
+
+    def add(self, model):
+        self._db_context.add(model=model)
+        self._last_added_model = model
+
+    def commit(self):
+        self._db_context.commit()
+        event = messaging.events.Structured(topic=topics.Topic.ENTITY_ADDED,
+                                            arguments=dict())
+        self._logger.info(msg=event.to_json())
+
+    def __repr__(self):
+        repr_ = '<{}(db_context={}, logger={})>'
+        return repr_.format(self.__class__.__name__,
+                            self._db_context,
+                            self._logger)
