@@ -106,7 +106,7 @@ def _set_sid(model, sid):
 class SidDefaulting(Context):
 
     def __init__(self,
-                 context,
+                 db_context,
                  _generate_sid=_generate_sid,
                  _set_sid=_set_sid):
 
@@ -115,10 +115,10 @@ class SidDefaulting(Context):
 
         Parameters
         ----------
-        context : downloadbot.services.database.contexts.Context
+        db_context : downloadbot.services.database.contexts.Context
         """
 
-        self._context = context
+        self._db_context = db_context
         self._generate_sid = _generate_sid
         self._set_sid = _set_sid
 
@@ -135,14 +135,14 @@ class SidDefaulting(Context):
                     self._set_sid(model=model, sid=sid)
                 except AttributeError:
                     pass
-        self._context.add(model=model)
+        self._db_context.add(model=model)
 
     def commit(self):
-        self._context.commit()
+        self._db_context.commit()
 
     def __repr__(self):
-        repr_ = '<{}(context={})>'
-        return repr_.format(self.__class__.__name__, self._context)
+        repr_ = '<{}(db_context={})>'
+        return repr_.format(self.__class__.__name__, self._db_context)
 
 
 def _set_metadata(entity, entity_state, by):
