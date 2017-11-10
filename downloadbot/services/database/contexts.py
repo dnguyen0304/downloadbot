@@ -110,7 +110,7 @@ class SidDefaulting(Context):
                  _set_sid=_set_sid):
 
         """
-        Component to include default values.
+        Component to include default values for SID fields.
 
         Parameters
         ----------
