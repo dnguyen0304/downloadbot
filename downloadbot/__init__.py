@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from . import factories
-
-__all__ = ['factories',
+__all__ = ['common',
+           'factories',
            'services']
