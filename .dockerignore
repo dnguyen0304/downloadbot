@@ -5,8 +5,8 @@ Dockerfile
 
 !docker
 
-!roomlistwatcher
-!requirements.txt
+!downloadbot
+!requirements*.txt
 !main.py
 
 !*-latest.zip

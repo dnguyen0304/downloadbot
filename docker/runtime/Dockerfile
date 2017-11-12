@@ -1,54 +1,23 @@
-FROM python:2.7-slim
+ARG DOMAIN
+ARG NAMESPACE
+ARG BASE_IMAGE_VERSION
+FROM ${DOMAIN}/${NAMESPACE}-runtime-base:${BASE_IMAGE_VERSION}
 
 MAINTAINER Duy Nguyen <dnguyen0304@gmail.com>
 
 ARG NAMESPACE
-ARG CONFIGURATION_FILE_NAME
-ARG AWS_CONFIGURATION_FILE_NAME
-ARG AWS_CREDENTIALS_FILE_NAME
 
-# unzip is needed to extract the package.
-# wget is a dependency of Chrome.
-ARG BUILDTIME_DEPENDENCIES="unzip"
-ARG RUNTIME_DEPENDENCIES="wget"
+ARG PACKAGE="${NAMESPACE}-latest.zip"
 
-ARG CHROME_DRIVER_VERSION="2.32"
+COPY ${PACKAGE} .
 
-ARG PACKAGE_DIRECTORY="/opt/${NAMESPACE}"
-ARG CONFIGURATION_DIRECTORY="/etc/opt/${NAMESPACE}"
-ARG LOG_DIRECTORY="/var/opt/${NAMESPACE}/log"
+RUN unzip -q ${PACKAGE} && \
+    chown --recursive ${NAMESPACE}:${NAMESPACE} . && \
+    rm ${PACKAGE}
 
-ENV CONFIGURATION_FILE_PATH="${CONFIGURATION_DIRECTORY}/${CONFIGURATION_FILE_NAME}"
-ENV AWS_CONFIG_FILE="${CONFIGURATION_DIRECTORY}/${AWS_CONFIGURATION_FILE_NAME}"
-ENV AWS_SHARED_CREDENTIALS_FILE="${CONFIGURATION_DIRECTORY}/${AWS_CREDENTIALS_FILE_NAME}"
+RUN apt-get purge -y --auto-remove ${BUILDTIME_DEPENDENCIES}
 
-RUN apt-get update -y && \
-    apt-get install -y --no-install-recommends ${BUILDTIME_DEPENDENCIES} ${RUNTIME_DEPENDENCIES}
-
-RUN useradd ${NAMESPACE}
-
-RUN mkdir ${PACKAGE_DIRECTORY} && \
-    mkdir --parent ${CONFIGURATION_DIRECTORY} && \
-    mkdir --parent ${LOG_DIRECTORY}
-
-WORKDIR ${PACKAGE_DIRECTORY}
-
-# Include the Chrome dependency.
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
-    echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | tee --append /etc/apt/sources.list.d/google.list > /dev/null
-RUN apt-get update -y && \
-    apt-get install -y google-chrome-stable
-
-# Include the Chrome Driver dependency.
-RUN wget http://chromedriver.storage.googleapis.com/${CHROME_DRIVER_VERSION}/chromedriver_linux64.zip && \
-    unzip -q -d /usr/local/bin chromedriver_linux64.zip && \
-    rm chromedriver_linux64.zip
-
-RUN chown --recursive ${NAMESPACE}:${NAMESPACE} ${CONFIGURATION_DIRECTORY} && \
-    chown --recursive ${NAMESPACE}:${NAMESPACE} ${LOG_DIRECTORY}
-
-RUN rm -fr /var/lib/apt/lists/* && \
-    apt-get purge -y --auto-remove ${BUILDTIME_DEPENDENCIES}
-
-VOLUME ${CONFIGURATION_DIRECTORY}
-VOLUME ${LOG_DIRECTORY}
+# Start the virtual display. The shell form of the ENTRYPOINT instruction must
+#     be used. This has not been confirmed.
+# Start the application.
+ENTRYPOINT xvfb-run python main.py

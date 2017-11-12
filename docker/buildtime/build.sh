@@ -17,7 +17,9 @@ mkdir ${PACKAGE}
 cp -r ${COMPONENT} ${PACKAGE}
 
 # Include the dependencies.
-pip install --requirement requirements.txt --target ${PACKAGE}
+if [ -s requirements.txt ]; then
+    pip install --requirement requirements.txt --target ${PACKAGE}
+fi
 
 # Include the entry point.
 cp main.py ${PACKAGE}
