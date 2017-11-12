@@ -13,7 +13,7 @@ class Acknowledging(consuming.handlers.Handler):
         Parameters
         ----------
         handler : downloadbot.common.messaging.consuming.handlers.Handler
-        queue_client: boto3 SQS Queue
+        queue_client : downloadbot.infrastructure.queuing.clients.Client
         """
 
         self._handler = handler
@@ -23,41 +23,15 @@ class Acknowledging(consuming.handlers.Handler):
         try:
             self._handler.handle(message=message)
         except (consuming.exceptions.HandleError, KeyboardInterrupt):
-            # The message was not processed successfully.
             # This smells.
-            self._change_visibility(message)
+            # The message was not processed successfully.
+            # This should check for failed requests.
+            self._queue_client.change_message_visibility(message, timeout=0)
             raise
         else:
             # The message was processed successfully.
-            self._delete(message=message)
-
-    def _change_visibility(self, message):
-        request = {
-            'Entries': [
-                {
-                    'Id': message.id,
-                    'ReceiptHandle': message.delivery_receipt,
-                    'VisibilityTimeout': 0
-                }
-            ]
-        }
-
-        # This should check for failed requests.
-        self._queue_client.change_message_visibility_batch(**request)
-
-    # This duplicates SqsFifoQueue Deleter.
-    def _delete(self, message):
-        request = {
-            'Entries': [
-                {
-                    'Id': message.id,
-                    'ReceiptHandle': message.delivery_receipt
-                }
-            ]
-        }
-
-        # This should check for failed requests.
-        self._queue_client.delete_messages(**request)
+            # This should check for failed requests.
+            self._queue_client.delete_message(message)
 
     def __repr__(self):
         repr_ = '{}(handler={}, queue_client={})'

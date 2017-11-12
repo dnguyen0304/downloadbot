@@ -3,10 +3,6 @@
 from .. import exceptions
 
 
-class DeleteError(Exception):
-    pass
-
-
 class HandleError(Exception):
     pass
 

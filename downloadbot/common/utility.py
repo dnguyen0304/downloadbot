@@ -140,7 +140,7 @@ def get_configuration():
 
     Returns
     -------
-    collections.Mapping
+    typing.Mapping
     """
 
     configuration_file_path = os.environ[_ENVIRONMENT_VARIABLE_NAME]

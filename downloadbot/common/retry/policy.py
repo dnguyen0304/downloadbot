@@ -27,7 +27,7 @@ class BaseAttemptEvent(io.JsonSerializable, metaclass=abc.ABCMeta):
         """
         Parameters
         ----------
-        data : collections.Mapping
+        data : typing.Mapping
         """
 
         serialized = json.dumps(data, default=repr)

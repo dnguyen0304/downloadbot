@@ -4,6 +4,7 @@ import abc
 import functools
 import os
 
+import selenium.common
 from selenium.webdriver.common.by import By
 
 from . import exceptions
@@ -84,8 +85,10 @@ class Download(Disposable):
         except lookup.exceptions.NoResultFound:
             message = 'The battle has not yet completed.'
             raise exceptions.BattleNotCompleted(message)
-        else:
+        try:
             download_button.click()
+        except selenium.common.exceptions.StaleElementReferenceException as e:
+            raise automation.exceptions.WebDriverError(e)
 
     def dispose(self):
         self._web_driver_disposer.dispose(self._web_driver)
