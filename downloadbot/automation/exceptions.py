@@ -9,5 +9,9 @@ class ConnectionLost(AutomationFailed):
     pass
 
 
+class WebDriverError(AutomationFailed):
+    pass
+
+
 class ValidationFailed(AutomationFailed):
     pass

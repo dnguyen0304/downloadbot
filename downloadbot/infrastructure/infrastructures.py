@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import warnings
+
 
 class Bot:
 
@@ -18,23 +20,28 @@ class Bot:
         return repr_.format(self.__class__.__name__, self.s3_client)
 
 
-# Should this instead provide a queue client?
 class Consumer:
 
-    def __init__(self, receiver, deleter):
+    def __init__(self, queue_client, receiver):
 
         """
         Parameters
         ----------
+        queue_client : downloadbot.infrastructure.queuing.clients.Client
         receiver : downloadbot.common.messaging.consuming.receivers.Receiver
-        deleter : downloadbot.common.messaging.consuming.deleters.Deleter
         """
 
-        self.receiver = receiver
-        self.deleter = deleter
+        self.queue_client = queue_client
+        self._receiver = receiver
+
+    @property
+    def receiver(self):
+        message = 'The Receiver functionality will be merged into the Client.'
+        warnings.warn(message, FutureWarning)
+        return self._receiver
 
     def __repr__(self):
-        repr_ = '{}(receiver={}, deleter={})'
+        repr_ = '{}(queue_client={}, receiver={})'
         return repr_.format(self.__class__.__name__,
-                            self.receiver,
-                            self.deleter)
+                            self.queue_client,
+                            self._receiver)

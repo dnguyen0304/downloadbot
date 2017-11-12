@@ -25,7 +25,7 @@ class Logger:
         """
         Parameters
         ----------
-        properties : collections.Mapping
+        properties : typing.Mapping
         """
 
         self._properties = properties
@@ -63,7 +63,7 @@ class ChromeWebDriver:
         """
         Parameters
         ----------
-        environment : collections.Mapping
+        environment : typing.Mapping
         """
 
         self._environment = environment
@@ -119,8 +119,8 @@ class Bot:
         web_driver_factory : downloadbot.factories.ChromeWebDriver
         logger_factory : downloadbot.factories.Logger
         infrastructure : downloadbot.infrastructure.infrastructures.Bot
-        environment : collections.Mapping
-        properties : collections.Mapping
+        environment : typing.Mapping
+        properties : typing.Mapping
         """
 
         self._web_driver_factory = web_driver_factory
@@ -197,6 +197,7 @@ class Bot:
             .with_stop_strategy(stop_strategy) \
             .with_wait_strategy(wait_strategy) \
             .continue_on_exception(automation.exceptions.ConnectionLost) \
+            .continue_on_exception(automation.exceptions.WebDriverError) \
             .continue_on_exception(exceptions.BattleNotCompleted) \
             .with_messaging_broker(messaging_broker) \
             .build()
@@ -279,8 +280,8 @@ class Consumer:
         Parameters
         ----------
         infrastructure : downloadbot.infrastructure.infrastructures.Consumer
-        environment : collections.Mapping
-        properties : collections.Mapping
+        environment : typing.Mapping
+        properties : typing.Mapping
         """
 
         self._infrastructure = infrastructure
@@ -363,10 +364,40 @@ class Consumer:
         # Create the handler.
         handler = consuming.adapters.BotToHandler(bot=bot)
 
+        # Create the queue client.
+        queue_client = self._infrastructure.queue_client
+
+        # Create the continue predicate.
+        def predicate(response):
+            try:
+                return response['Failed'][0]['Code'] == 'InternalError'
+            except KeyError:
+                return False
+
+        # Create the retry policy.
+        stop_strategy = retry.stop_strategies.AfterAttempt(
+            maximum_attempt=self._properties['queue_client']['policy']['stop_strategy']['maximum_attempt'])
+        wait_strategy = retry.wait_strategies.Fixed(
+            wait_time=self._properties['queue_client']['policy']['wait_strategy']['wait_time'])
+        messaging_broker_factory = retry.messaging.broker_factories.Logging(
+            logger=logger)
+        messaging_broker = messaging_broker_factory.create(
+            event_name=self._properties['queue_client']['policy']['messaging_broker']['event']['name'])
+        policy_builder = retry.PolicyBuilder() \
+            .with_stop_strategy(stop_strategy) \
+            .with_wait_strategy(wait_strategy) \
+            .with_messaging_broker(messaging_broker)
+        # Set to continue on HTTP status code 500 Internal Server Error.
+        policy_builder = policy_builder.continue_if_result(predicate=predicate)
+        retry_policy = policy_builder.build()
+
+        # Include logging.
+        queue_client = infrastructure.queuing.clients.Orchestrating(
+            client=queue_client,
+            retry_policy=retry_policy,
+            logger=logger)
+
         # Include acknowledgement.
-        queue_client_factory = infrastructure.factories._SqsFifoQueue(
-            properties=self._properties['queues']['consume_from'])
-        queue_client = queue_client_factory.create()
         handler = consuming.handlers.Acknowledging(handler=handler,
                                                    queue_client=queue_client)
         dependencies['handler'] = handler
@@ -394,7 +425,7 @@ class Consumer:
         # Include deleting.
         dependencies['filters'] = [
             consuming.filters.Deleting(message_filter=message_filter,
-                                       deleter=self._infrastructure.deleter)
+                                       queue_client=queue_client)
             for message_filter
             in dependencies['filters']]
 

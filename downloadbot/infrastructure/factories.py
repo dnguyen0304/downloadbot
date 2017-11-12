@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 
-import queue as queuing
+import queue
 from http import HTTPStatus as HttpStatus
 
 import boto3
 
 from . import consuming
 from . import infrastructures
+from . import queuing
 from downloadbot.common import utility
 
 
@@ -20,7 +21,7 @@ class _ConcurrentLinkedQueue:
         queue.Queue
         """
 
-        return queuing.Queue()
+        return queue.Queue()
 
     def __repr__(self):
         repr_ = '{}()'
@@ -35,7 +36,7 @@ class _ConcurrentLinkedQueueReceiver:
         Parameters
         ----------
         queue : queue.Queue
-        properties : collections.Mapping
+        properties : typing.Mapping
         """
 
         self._queue = queue
@@ -70,23 +71,6 @@ class _ConcurrentLinkedQueueReceiver:
                             self._properties)
 
 
-class _ConcurrentLinkedQueueDeleter:
-
-    def create(self):
-
-        """
-        Returns
-        -------
-        downloadbot.common.messaging.consuming.deleters.Deleter
-        """
-
-        return consuming.deleters.Nop()
-
-    def __repr__(self):
-        repr_ = '{}()'
-        return repr_.format(self.__class__.__name__)
-
-
 class _SqsFifoQueue:
 
     _SERVICE_NAME = 'sqs'
@@ -96,7 +80,7 @@ class _SqsFifoQueue:
         """
         Parameters
         ----------
-        properties : collections.Mapping
+        properties : typing.Mapping
         """
 
         self._properties = properties
@@ -145,7 +129,7 @@ class _SqsFifoQueueReceiver:
         Parameters
         ----------
         sqs_queue : boto3.resources.factory.sqs.Queue
-        properties : collections.Mapping
+        properties : typing.Mapping
         """
 
         self._sqs_queue = sqs_queue
@@ -176,38 +160,10 @@ class _SqsFifoQueueReceiver:
                             self._properties)
 
 
-class _SqsFifoQueueDeleter:
-
-    def __init__(self, sqs_queue):
-
-        """
-        Parameters
-        ----------
-        sqs_queue : boto3.resources.factory.sqs.Queue
-        """
-
-        self._sqs_queue = sqs_queue
-
-    def create(self):
-
-        """
-        Returns
-        -------
-        downloadbot.common.messaging.consuming.deleters.Deleter
-        """
-
-        return consuming.deleters.SqsFifoQueue(sqs_queue=self._sqs_queue)
-
-    def __repr__(self):
-        repr_ = '{}(sqs_queue={})'
-        return repr_.format(self.__class__.__name__, self._sqs_queue)
-
-
 class _QueueAbstractFactory:
 
-    def __init__(self, receiver_factory, deleter_factory):
+    def __init__(self, receiver_factory):
         self._receiver_factory = receiver_factory
-        self._deleter_factory = deleter_factory
 
     @classmethod
     def new_concurrent_linked(cls, properties):
@@ -215,7 +171,7 @@ class _QueueAbstractFactory:
         """
         Parameters
         ----------
-        properties : collections.Mapping
+        properties : typing.Mapping
 
         Returns
         -------
@@ -235,13 +191,9 @@ class _QueueAbstractFactory:
             queue=queue,
             properties=properties['receiver'])
 
-        # Create the deleter factory.
-        deleter_factory = _ConcurrentLinkedQueueDeleter()
-
         # Create the queue abstract factory.
         queue_abstract_factory = _QueueAbstractFactory(
-            receiver_factory=receiver_factory,
-            deleter_factory=deleter_factory)
+            receiver_factory=receiver_factory)
 
         return queue_abstract_factory
 
@@ -251,7 +203,7 @@ class _QueueAbstractFactory:
         """
         Parameters
         ----------
-        properties : collections.Mapping
+        properties : typing.Mapping
 
         Returns
         -------
@@ -273,13 +225,9 @@ class _QueueAbstractFactory:
             sqs_queue=sqs_queue,
             properties=properties['receiver'])
 
-        # Create the deleter factory.
-        deleter_factory = _SqsFifoQueueDeleter(sqs_queue=sqs_queue)
-
         # Create the queue abstract factory.
         queue_abstract_factory = _QueueAbstractFactory(
-            receiver_factory=receiver_factory,
-            deleter_factory=deleter_factory)
+            receiver_factory=receiver_factory)
 
         return queue_abstract_factory
 
@@ -296,21 +244,9 @@ class _QueueAbstractFactory:
 
         return self._receiver_factory.create()
 
-    def create_deleter(self):
-
-        """
-        Returns
-        -------
-        downloadbot.common.messaging.consuming.deleters.Deleter
-        """
-
-        return self._deleter_factory.create()
-
     def __repr__(self):
-        repr_ = '{}(receiver_factory={}, deleter_factory={})'
-        return repr_.format(self.__class__.__name__,
-                            self._receiver_factory,
-                            self._deleter_factory)
+        repr_ = '{}(receiver_factory={})'
+        return repr_.format(self.__class__.__name__, self._receiver_factory)
 
 
 class S3Client:
@@ -322,7 +258,7 @@ class S3Client:
         """
         Parameters
         ----------
-        properties : collections.Mapping
+        properties : typing.Mapping
         """
 
         self._properties = properties
@@ -356,7 +292,7 @@ class BotInfrastructure:
         """
         Parameters
         ----------
-        properties : collections.Mapping
+        properties : typing.Mapping
         """
 
         self._properties = properties
@@ -391,7 +327,7 @@ class ConsumerInfrastructure:
         """
         Parameters
         ----------
-        properties : collections.Mapping
+        properties : typing.Mapping
         """
 
         self._properties = properties
@@ -404,6 +340,12 @@ class ConsumerInfrastructure:
         downloadbot.infrastructure.infrastructures.Consumer
         """
 
+        # Create the queue client.
+        queue_factory = _SqsFifoQueue(
+            properties=self._properties['queues']['consume_from'])
+        sqs_queue = queue_factory.create()
+        queue_client = queuing.clients.SqsFifo(sqs_queue=sqs_queue)
+
         # Create the queue factory.
         queue_factory = _QueueAbstractFactory.new_sqs_fifo(
             properties=self._properties)
@@ -411,12 +353,9 @@ class ConsumerInfrastructure:
         # Create the receiver.
         receiver = queue_factory.create_receiver()
 
-        # Create the deleter.
-        deleter = queue_factory.create_deleter()
-
         # Create the infrastructure.
-        infrastructure = infrastructures.Consumer(receiver=receiver,
-                                                  deleter=deleter)
+        infrastructure = infrastructures.Consumer(queue_client=queue_client,
+                                                  receiver=receiver)
 
         return infrastructure
 
