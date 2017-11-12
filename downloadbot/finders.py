@@ -4,11 +4,12 @@ import abc
 import collections
 import os
 
+from downloadbot.common import lookup
+from downloadbot.common import messaging
+from downloadbot.common import retry
+from downloadbot.common import utility
+
 from . import topics
-from .common import lookup
-from .common import messaging
-from .common import retry
-from .common import utility
 
 
 class FilePath(metaclass=abc.ABCMeta):

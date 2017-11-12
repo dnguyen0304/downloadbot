@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from .common import utility
+from downloadbot.common import utility
 
 
 class Topic(utility.AutomatedEnum):

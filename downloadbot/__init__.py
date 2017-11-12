@@ -1,4 +1,3 @@
 # -*- coding: utf-8 -*-
 
-__all__ = ['common',
-           'factories']
+__all__ = ['factories']

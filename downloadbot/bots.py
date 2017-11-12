@@ -4,14 +4,14 @@ import abc
 import functools
 import os
 
+from downloadbot.common import io
+from downloadbot.common import lookup
+from downloadbot.common import retry
+from downloadbot.common import utility
 from selenium.webdriver.common.by import By
 
 from . import automation
 from . import exceptions
-from .common import io
-from .common import lookup
-from .common import retry
-from .common import utility
 
 
 class Bot(metaclass=abc.ABCMeta):
