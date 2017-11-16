@@ -46,8 +46,8 @@ class Capturing(WebDriver):
 
         Parameters
         ----------
-        disposer : downloadbot.common.automation.disposers.WebDriver
-        generator : downloadbot.common.automation.generators.FilePath
+        disposer : downloadbot.automation.disposers.WebDriver
+        generator : downloadbot.automation.generators.FilePath
             Generator for creating file paths.
         """
 

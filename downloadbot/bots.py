@@ -5,14 +5,14 @@ import functools
 import os
 
 import selenium.common
+from downloadbot.common import io
+from downloadbot.common import lookup
+from downloadbot.common import retry
+from downloadbot.common import utility
 from selenium.webdriver.common.by import By
 
+from . import automation
 from . import exceptions
-from .common import automation
-from .common import io
-from .common import lookup
-from .common import retry
-from .common import utility
 
 
 class Bot(metaclass=abc.ABCMeta):
@@ -33,7 +33,7 @@ class Bot(metaclass=abc.ABCMeta):
 
         Raises
         ------
-        downloadbot.common.automation.exceptions.AutomationFailed
+        downloadbot.automation.exceptions.AutomationFailed
             If the automation failed.
         """
 
@@ -59,8 +59,8 @@ class Download(Disposable):
         ----------
         web_driver : selenium.webdriver.remote.webdriver.WebDriver
         page_initializer : downloadbot.initializers.Page
-        button_finder : downloadbot.common.automation.finders.Button
-        web_driver_disposer : downloadbot.common.automation.disposers.WebDriver
+        button_finder : downloadbot.automation.finders.Button
+        web_driver_disposer : downloadbot.automation.disposers.WebDriver
         """
 
         self._web_driver = web_driver

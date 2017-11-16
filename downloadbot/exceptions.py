@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from .common import automation
+from . import automation
 
 
 class BattleNotCompleted(automation.exceptions.AutomationFailed):

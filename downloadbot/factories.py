@@ -4,16 +4,16 @@ import logging
 import logging.config
 
 import selenium.webdriver
+from downloadbot.common import messaging
+from downloadbot.common import retry
 from selenium.webdriver.support.ui import WebDriverWait
 
+from . import automation
 from . import bots
 from . import exceptions
 from . import finders
 from . import infrastructure
 from . import initializers
-from .common import automation
-from .common import messaging
-from .common import retry
 from .infrastructure import consuming
 from .infrastructure import io
 

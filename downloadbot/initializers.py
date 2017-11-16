@@ -2,8 +2,8 @@
 
 import abc
 
+from . import automation
 from . import exceptions
-from .common import automation
 
 
 # This could be evaluated for being migrated to common.
@@ -26,7 +26,7 @@ class Page(metaclass=abc.ABCMeta):
 
         Raises
         ------
-        downloadbot.common.automation.exceptions.AutomationFailed
+        downloadbot.automation.exceptions.AutomationFailed
             If the page was not initialized successfully.
         """
 
@@ -55,7 +55,7 @@ class PostValidating(Page):
         Parameters
         ----------
         page_initializer : downloadbot.initializers.Page
-        validator : downloadbot.common.automation.validators.PokemonShowdown
+        validator : downloadbot.automation.validators.PokemonShowdown
         """
 
         self._page_initializer = page_initializer
@@ -66,9 +66,9 @@ class PostValidating(Page):
         """
         Raises
         ------
-        downloadbot.common.automation.exceptions.ConnectionLost
+        downloadbot.automation.exceptions.ConnectionLost
             If the connection was not established successfully or was lost.
-        downloadbot.common.automation.exceptions.RoomExpired
+        downloadbot.automation.exceptions.RoomExpired
             If the room has expired.
         """
 
